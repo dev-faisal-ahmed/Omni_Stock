@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(ulid())
+  name      String
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id               String        @id @default(ulid())
+  categoryId       String
+  name             String
+  description      String?
+  price            Float
+  stock            Int
+  minimumThreshold Int
+  status           ProductStatus @default(ACTIVE)
+  isDeleted        Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("products")
+}
+
+enum ProductStatus {
+  ACTIVE
+  OUT_OF_STOCK
+}
+
+model Order {
+  id         String      @id @default(ulid())
+  customerId String
+  totalPrice Float
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model OrderProductJunction {
+  id        String @id @default(ulid())
+  orderId   String
+  productId String
+  quantity  Int
+
+  @@unique([orderId, productId])
+  @@map("order_product_junction")
+}
