@@ -3,6 +3,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import { PropsWithChildren } from "react";
+import { QueryProvider } from "@/providers/query-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -34,7 +36,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
         jetbrainsMono.variable,
       )}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <QueryProvider>{children}</QueryProvider>
+        <Toaster richColors duration={2000} />
+      </body>
     </html>
   );
 }

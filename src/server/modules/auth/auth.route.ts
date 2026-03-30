@@ -4,7 +4,7 @@ import { registerDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
 import { ResponseDto } from "@/server/utils/response.dto";
 
-export const authRoute = new Hono().post("/signup", jsonValidator(registerDto), async (c) => {
+export const authRoute = new Hono().post("/register", jsonValidator(registerDto), async (c) => {
   const newUser = await AuthService.register(c.req.valid("json"));
   return c.json(ResponseDto.success({ message: "User registered successfully", data: newUser }));
 });
