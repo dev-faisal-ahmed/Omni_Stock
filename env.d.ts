@@ -5,6 +5,7 @@ declare global {
     interface ProcessEnv {
       DATABASE_URL: string;
       NODE_ENV?: "development" | "production" | "test";
+      JWT_SECRET: string;
     }
   }
 }

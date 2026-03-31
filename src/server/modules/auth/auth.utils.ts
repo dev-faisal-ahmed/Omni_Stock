@@ -1,4 +1,7 @@
 import argon2 from "argon2";
+import { sign, verify } from "hono/jwt";
+
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export class AuthUtils {
   static async hashPassword(password: string) {
@@ -10,7 +13,15 @@ export class AuthUtils {
     });
   }
 
-  static async verifyPassword(hash: string, plainPassword: string) {
+  static async comparePassword(hash: string, plainPassword: string) {
     return argon2.verify(hash, plainPassword);
+  }
+
+  static async generateToken(userId: string) {
+    return sign({ userId }, JWT_SECRET);
+  }
+
+  static async verifyToken(token: string) {
+    return verify(token, JWT_SECRET, { alg: "HS256" });
   }
 }

@@ -19,4 +19,10 @@ export const registerFormSchema = z
     }
   });
 
+export const loginFormSchema = z.object({
+  email: z.string({ message: "Email is required" }).trim().email("Invalid email"),
+  password: z.string({ message: "Password is required" }),
+}); 
+
 export type TRegisterFormData = z.infer<typeof registerFormSchema>;
+export type TLoginFormData = z.infer<typeof loginFormSchema>;

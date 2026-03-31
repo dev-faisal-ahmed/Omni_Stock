@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db";
-import { RegisterDto } from "./auth.dto";
+import { LoginDto, RegisterDto } from "./auth.dto";
 import { AppError } from "@/server/utils/app.error";
 import { AuthUtils } from "./auth.utils";
 
@@ -20,5 +20,16 @@ export class AuthService {
     });
 
     return newUser;
+  }
+
+  static async login(dto: LoginDto) {
+    const user = await prisma.user.findUnique({ where: { email: dto.email } });
+    if (!user) throw new AppError("Invalid credentials", "UNAUTHORIZED");
+
+    const isPasswordValid = await AuthUtils.comparePassword(user.password, dto.password);
+    if (!isPasswordValid) throw new AppError("Invalid credentials", "UNAUTHORIZED");
+
+    const token = await AuthUtils.generateToken(user.id);
+    return token;
   }
 }
