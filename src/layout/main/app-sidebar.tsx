@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -16,42 +15,39 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-
-import { CaretRightIcon, DotsThreeIcon, LockIcon } from "@phosphor-icons/react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { AppLogo, CommonAvatar } from "../components/shared";
 import { useNavItems } from "./use-nav-items";
-import { Logout } from "@/feat/auth/components";
-import { useAuth, usePopupState } from "@/lib/hooks";
-import { Button } from "@/components/ui/button";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { AppLogo } from "@/components/app-logo";
 import { cn } from "@/lib/utils";
 
-export const AppSidebar = () => (
-  <Sidebar variant="inset">
-    <AppSidebarHeader />
+export function AppSidebar() {
+  return (
+    <Sidebar variant="inset" className="border-r">
+      <AppSidebarHeader />
 
-    <SidebarContent className="mt-2">
-      <SidebarGroup>
-        <AppSidebarNavItems />
-      </SidebarGroup>
-    </SidebarContent>
+      <SidebarContent className="mt-2">
+        <SidebarGroup>
+          <AppSidebarNavItems />
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  );
+}
 
-    <AppSidebarFooter />
-  </Sidebar>
-);
+function AppSidebarHeader() {
+  return (
+    <SidebarHeader>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <AppLogo />
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarHeader>
+  );
+}
 
-const AppSidebarHeader = () => (
-  <SidebarHeader>
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <AppLogo />
-      </SidebarMenuItem>
-    </SidebarMenu>
-  </SidebarHeader>
-);
-
-const AppSidebarNavItems = () => {
+function AppSidebarNavItems() {
   const { navItems } = useNavItems();
 
   return (
@@ -63,11 +59,11 @@ const AppSidebarNavItems = () => {
       </SidebarMenu>
     </SidebarGroupContent>
   );
-};
+}
 
 type TSidebarItem = ReturnType<typeof useNavItems>["navItems"][number];
 
-const SidebarLink = ({ url, icon: Icon, title, items, isActive }: TSidebarItem) => {
+function SidebarLink({ url, icon: Icon, title, items, isActive }: TSidebarItem) {
   if (!items?.length)
     return (
       <SidebarMenuItem>
@@ -85,7 +81,11 @@ const SidebarLink = ({ url, icon: Icon, title, items, isActive }: TSidebarItem) 
       <Collapsible asChild defaultOpen={isActive} className="group/collapsible">
         <SidebarMenuItem>
           <CollapsibleTrigger asChild>
-            <SidebarMenuButton isActive={isActive} className={cn(!isActive && "text-muted-foreground")} tooltip={title}>
+            <SidebarMenuButton
+              isActive={isActive}
+              className={cn(!isActive && "text-muted-foreground")}
+              tooltip={title}
+            >
               <Icon />
               <span>{title}</span>
               <CaretRightIcon className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -108,50 +108,57 @@ const SidebarLink = ({ url, icon: Icon, title, items, isActive }: TSidebarItem) 
         </SidebarMenuItem>
       </Collapsible>
     );
-};
+}
 
-const AppSidebarFooter = () => {
-  const { data: authData } = useAuth();
-  if (!authData?.data) return null;
+// function AppSidebarFooter() {
+//   const { data: authData } = useAuth();
+//   if (!authData?.data) return null;
 
-  const user = authData.data;
+//   const user = authData.data;
 
-  return (
-    <SidebarFooter>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <div className="flex h-16 items-center justify-center gap-2 rounded-none border-t py-4 hover:bg-transparent">
-            <CommonAvatar name={user.name ?? ""} fallbackClassName="bg-primary text-white" size="SM" />
+//   return (
+//     <SidebarFooter>
+//       <SidebarMenu>
+//         <SidebarMenuItem>
+//           <div className="flex h-16 items-center justify-center gap-2 rounded-none border-t py-4 hover:bg-transparent">
+//             <CommonAvatar
+//               name={user.name ?? ""}
+//               fallbackClassName="bg-primary text-white"
+//               size="SM"
+//             />
 
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">{user.name}</span>
-              <span className="text-muted-foreground truncate text-xs">{user.email}</span>
-            </div>
-            <ActionMenu />
-          </div>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </SidebarFooter>
-  );
-};
+//             <div className="grid flex-1 text-left text-sm leading-tight">
+//               <span className="truncate font-semibold">{user.name}</span>
+//               <span className="text-muted-foreground truncate text-xs">{user.email}</span>
+//             </div>
+//             <ActionMenu />
+//           </div>
+//         </SidebarMenuItem>
+//       </SidebarMenu>
+//     </SidebarFooter>
+//   );
+// }
 
-const ActionMenu = () => {
-  const { open, onOpenChange } = usePopupState();
+// function ActionMenu() {
+//   const { open, onOpenChange } = usePopupState();
 
-  return (
-    <DropdownMenu open={open} onOpenChange={onOpenChange} modal>
-      <DropdownMenuTrigger asChild>
-        <button className="hover:bg-background cursor-pointer rounded-md p-2" onClick={() => onOpenChange(true)}>
-          <DotsThreeIcon className="size-4" />
-        </button>
-      </DropdownMenuTrigger>
+//   return (
+//     <DropdownMenu open={open} onOpenChange={onOpenChange} modal>
+//       <DropdownMenuTrigger asChild>
+//         <button
+//           className="hover:bg-background cursor-pointer rounded-md p-2"
+//           onClick={() => onOpenChange(true)}
+//         >
+//           <DotsThreeIcon className="size-4" />
+//         </button>
+//       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-48 p-2">
-        <Button variant="ghost" className="w-full cursor-pointer justify-start px-4 py-2">
-          <LockIcon /> Change Password
-        </Button>
-        <Logout />
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
+//       <DropdownMenuContent className="w-48 p-2">
+//         <Button variant="ghost" className="w-full cursor-pointer justify-start px-4 py-2">
+//           <LockIcon /> Change Password
+//         </Button>
+//         <Logout />
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   );
+// };

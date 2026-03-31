@@ -14,3 +14,10 @@ export async function loginApi(payload: TLoginFormData) {
   if (!resData.success) throw new Error(resData.message);
   return resData;
 }
+
+export async function meApi() {
+  const res = await authClient.me.$get();
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}
