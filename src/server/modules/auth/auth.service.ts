@@ -32,4 +32,13 @@ export class AuthService {
     const token = await AuthUtils.generateToken(user.id);
     return token;
   }
+
+  static async me(userId: string) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true, email: true, createdAt: true },
+    });
+    if (!user) throw new AppError("User not found", "NOT_FOUND");
+    return user;
+  }
 }
