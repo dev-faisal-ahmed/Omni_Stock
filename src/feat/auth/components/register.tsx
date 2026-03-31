@@ -38,7 +38,7 @@ export function Register() {
 
   return (
     <section className="flex min-h-screen items-center justify-center">
-      <div className="border-border bg-card flex w-full max-w-110 flex-col rounded-3xl border p-8 shadow-sm">
+      <div className="border-border bg-card flex w-full max-w-110 flex-col border p-8 shadow-sm">
         <div className="mb-8 text-center">
           <h1 className="text-foreground mb-2 text-2xl font-bold tracking-tight">
             Join <span className="text-primary">OmniStock</span>

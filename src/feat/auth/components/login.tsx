@@ -8,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/form/password-input";
 import { FormField } from "@/components/form/form-field";
-import { loginFormSchema, type TLoginFormData } from "../auth-schema";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { loginFormSchema, TLoginFormData } from "../auth-schema";
 import { loginApi } from "../auth-api";
 
 export function Login() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const form = useForm<TLoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -27,7 +28,12 @@ export function Login() {
   const { mutate, isPending } = useMutation({
     mutationFn: loginApi,
     onSuccess() {
-      router.push("/");
+      const callbackUrl = searchParams.get("callbackUrl");
+      if (callbackUrl) {
+        router.push(decodeURI(callbackUrl));
+      } else {
+        router.push("/");
+      }
     },
   });
 
@@ -35,7 +41,7 @@ export function Login() {
 
   return (
     <section className="flex min-h-screen items-center justify-center">
-      <div className="border-border bg-card flex w-full max-w-110 flex-col rounded-3xl border p-8 shadow-sm">
+      <div className="border-border bg-card flex w-full max-w-110 flex-col border p-8 shadow-sm">
         <div className="mb-8 text-center">
           <h1 className="text-foreground mb-2 text-2xl font-bold tracking-tight">
             Welcome back to <span className="text-primary">OmniStock</span>

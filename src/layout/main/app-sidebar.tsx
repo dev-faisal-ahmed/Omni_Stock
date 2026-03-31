@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   return (
-    <Sidebar variant="inset" className="border-r">
+    <Sidebar variant="inset">
       <AppSidebarHeader />
 
       <SidebarContent className="mt-2">
@@ -109,56 +109,3 @@ function SidebarLink({ url, icon: Icon, title, items, isActive }: TSidebarItem) 
       </Collapsible>
     );
 }
-
-// function AppSidebarFooter() {
-//   const { data: authData } = useAuth();
-//   if (!authData?.data) return null;
-
-//   const user = authData.data;
-
-//   return (
-//     <SidebarFooter>
-//       <SidebarMenu>
-//         <SidebarMenuItem>
-//           <div className="flex h-16 items-center justify-center gap-2 rounded-none border-t py-4 hover:bg-transparent">
-//             <CommonAvatar
-//               name={user.name ?? ""}
-//               fallbackClassName="bg-primary text-white"
-//               size="SM"
-//             />
-
-//             <div className="grid flex-1 text-left text-sm leading-tight">
-//               <span className="truncate font-semibold">{user.name}</span>
-//               <span className="text-muted-foreground truncate text-xs">{user.email}</span>
-//             </div>
-//             <ActionMenu />
-//           </div>
-//         </SidebarMenuItem>
-//       </SidebarMenu>
-//     </SidebarFooter>
-//   );
-// }
-
-// function ActionMenu() {
-//   const { open, onOpenChange } = usePopupState();
-
-//   return (
-//     <DropdownMenu open={open} onOpenChange={onOpenChange} modal>
-//       <DropdownMenuTrigger asChild>
-//         <button
-//           className="hover:bg-background cursor-pointer rounded-md p-2"
-//           onClick={() => onOpenChange(true)}
-//         >
-//           <DotsThreeIcon className="size-4" />
-//         </button>
-//       </DropdownMenuTrigger>
-
-//       <DropdownMenuContent className="w-48 p-2">
-//         <Button variant="ghost" className="w-full cursor-pointer justify-start px-4 py-2">
-//           <LockIcon /> Change Password
-//         </Button>
-//         <Logout />
-//       </DropdownMenuContent>
-//     </DropdownMenu>
-//   );
-// };
