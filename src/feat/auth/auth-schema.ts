@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const registerSchema = z
+export const registerFormSchema = z
   .object({
     name: z.string({ message: "Name is required" }).trim().nonempty("Name can not be empty"),
     email: z.string({ message: "Email is required" }).trim().email("Invalid email"),
@@ -19,4 +19,4 @@ export const registerSchema = z
     }
   });
 
-export type TRegisterFormData = z.infer<typeof registerSchema>;
+export type TRegisterFormData = z.infer<typeof registerFormSchema>;

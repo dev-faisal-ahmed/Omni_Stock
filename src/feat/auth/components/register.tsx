@@ -1,28 +1,24 @@
 "use client";
 
+import Link from "next/link";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/form/password-input";
 import { FormField } from "@/components/form/form-field";
-import { registerSchema, type TRegisterFormData } from "../auth.schema";
+import { registerFormSchema, type TRegisterFormData } from "../auth-schema";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-// import { queryKeys } from "@/lib/query.keys";
-// import { registerApi } from "../auth.api"; // Use your actual API implementation
-
-// Example query key mutation, replace if needed
-const mutationKey = ["auth", "register"] as const;
+import { registerApi } from "../auth-api";
 
 export function Register() {
   const router = useRouter();
   // const queryClient = useQueryClient();
 
   const form = useForm<TRegisterFormData>({
-    // @ts-expect-error Zod v4 type mismatch with current @hookform/resolvers
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -32,25 +28,14 @@ export function Register() {
   });
 
   const { mutate, isPending } = useMutation({
-    mutationKey,
-    // Replace with your actual register API
-    mutationFn: async (data: TRegisterFormData) => {
-      // Mock API call
-      // await registerApi(data);
-      console.log("Mock Register Data:", data);
-      await new Promise((r) => setTimeout(r, 1000));
-      return { success: true };
-    },
-    onSuccess: () => {
+    mutationFn: registerApi,
+    onSuccess() {
       form.reset();
-      // queryClient.invalidateQueries({ queryKey: [queryKeys.auth.session] });
       router.push("/login"); // Adjust to your actual login route
     },
   });
 
-  const onSubmit = (data: TRegisterFormData) => {
-    mutate(data);
-  };
+  const onLogin = form.handleSubmit((formData) => mutate(formData));
 
   return (
     <section className="flex min-h-screen items-center justify-center">
@@ -64,7 +49,7 @@ export function Register() {
           </p>
         </div>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={onLogin} className="space-y-5">
           <FormField control={form.control} name="name" label="Full Name">
             {({ field }) => <Input {...field} id="name" placeholder="John Doe" />}
           </FormField>
