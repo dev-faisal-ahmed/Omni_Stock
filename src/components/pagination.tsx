@@ -85,7 +85,7 @@ export function Pagination({
   };
 
   return (
-    <div className="bg-muted flex w-full items-center space-x-6 rounded-md border-t px-4 py-2 lg:space-x-8">
+    <div className="bg-muted flex w-full items-center space-x-6 border-t px-4 py-2 lg:space-x-8">
       <div className="text-sm font-medium">
         Page {currentPage} of {totalPage}
       </div>

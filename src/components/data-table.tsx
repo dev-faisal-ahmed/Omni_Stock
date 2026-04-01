@@ -1,5 +1,4 @@
 "use client";
-"use no memo";
 
 import * as React from "react";
 
@@ -54,15 +53,15 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className={cn("flex flex-col overflow-hidden rounded-xl border", className?.container)}>
-      {header && <div className="mb-4">{header}</div>}
+    <div className={cn("flex flex-col overflow-hidden border", className?.container)}>
+      {header && <div>{header}</div>}
       <ScrollArea className={cn(className?.body, "grow")} disableScrollbar>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="py-4">
                     {header.isPlaceholder && null}
                     {!header.isPlaceholder &&
                       flexRender(header.column.columnDef.header, header.getContext())}
@@ -137,7 +136,7 @@ function DataTableBody<TData, TValue>({
       {rows.map((row) => (
         <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
           {row.getVisibleCells().map((cell) => (
-            <TableCell key={cell.id}>
+            <TableCell key={cell.id} className="py-4">
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           ))}

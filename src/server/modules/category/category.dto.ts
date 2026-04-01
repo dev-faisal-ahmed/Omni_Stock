@@ -25,4 +25,5 @@ function transformSlug(str: string) {
 }
 
 export type AddCategoryDto = z.infer<typeof addCategoryDto>;
+export type AddCategoryInputDto = z.input<typeof addCategoryDto>;
 export type GetCategoriesDto = z.infer<typeof getCategoriesDto>;

@@ -23,6 +23,8 @@ export class CategoryService {
     const { search, page, limit } = dto;
     const pagination = new Pagination(page, limit);
 
+    console.log({ search, page, limit });
+
     const categoryQuery: CategoryWhereInput = {
       ...(search && {
         OR: [
