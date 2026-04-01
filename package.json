@@ -8,8 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "db:push": "prisma push",
-    "db:studio": "prisma studio"
+    "db:push": "pnpm dlx prisma db push",
+    "db:generate": "pnpm dlx prisma generate",
+    "db:studio": "pnpm dlx prisma studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

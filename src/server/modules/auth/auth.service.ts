@@ -6,7 +6,9 @@ import { AuthUtils } from "./auth.utils";
 export class AuthService {
   static async register(dto: RegisterDto) {
     const isUserExist = await prisma.user.findUnique({ where: { email: dto.email } });
-    if (isUserExist) throw new AppError("User already exists", "CONFLICT");
+    if (isUserExist) {
+      throw new AppError("User already exists", "CONFLICT");
+    }
 
     const hashedPassword = await AuthUtils.hashPassword(dto.password);
     const newUser = await prisma.user.create({
@@ -24,10 +26,14 @@ export class AuthService {
 
   static async login(dto: LoginDto) {
     const user = await prisma.user.findUnique({ where: { email: dto.email } });
-    if (!user) throw new AppError("Invalid credentials", "UNAUTHORIZED");
+    if (!user) {
+      throw new AppError("Invalid credentials", "UNAUTHORIZED");
+    }
 
     const isPasswordValid = await AuthUtils.comparePassword(user.password, dto.password);
-    if (!isPasswordValid) throw new AppError("Invalid credentials", "UNAUTHORIZED");
+    if (!isPasswordValid) {
+      throw new AppError("Invalid credentials", "UNAUTHORIZED");
+    }
 
     const token = await AuthUtils.generateToken(user.id);
     return token;

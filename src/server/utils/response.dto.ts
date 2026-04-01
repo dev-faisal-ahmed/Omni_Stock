@@ -1,9 +1,4 @@
-type TMeta = {
-  page: number;
-  limit: number;
-  total: number;
-  totalPage: number;
-};
+import { TMeta } from "../common/common.types";
 
 type TSuccessResponse<TData = undefined> = {
   success: true;
