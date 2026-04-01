@@ -29,11 +29,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html
       lang="en"
       className={cn(
-        "h-full antialiased",
+        "h-full antialiased dark",
         geistSans.variable,
         geistMono.variable,
         "font-mono",
         jetbrainsMono.variable,
+        
       )}
     >
       <body className="flex min-h-full flex-col">

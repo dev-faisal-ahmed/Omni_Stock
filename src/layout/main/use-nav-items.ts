@@ -26,8 +26,8 @@ type TNavItem = {
 
 const ROUTES = [
   { title: "Dashboard", url: "/", icon: SquaresFourIcon },
-  { title: "Products", url: "/products", icon: PackageIcon },
   { title: "Categories", url: "/categories", icon: TagIcon },
+  { title: "Products", url: "/products", icon: PackageIcon },
   { title: "Orders", url: "/orders", icon: ListChecksIcon },
   { title: "Analytics", url: "/analytics", icon: ChartLineIcon },
 ] as const;
