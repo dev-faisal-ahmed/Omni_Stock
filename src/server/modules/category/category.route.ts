@@ -19,3 +19,6 @@ export const categoryRoute = new Hono()
       ResponseDto.success({ message: "Category Retrieved successfully", data: categories, meta }),
     );
   });
+
+
+  export type TCategoryRoute = typeof categoryRoute;

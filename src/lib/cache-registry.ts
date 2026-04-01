@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 export const QK = {
   auth: "auth",
+  categories:"categories",
 } as const;
 
 type TKey = (typeof QK)[keyof typeof QK];

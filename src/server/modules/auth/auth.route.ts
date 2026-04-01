@@ -35,4 +35,4 @@ export const authRoute = new Hono()
     return c.json(ResponseDto.success("Logged out successfully"));
   });
 
-export type AuthRoute = typeof authRoute;
+export type TAuthRoute = typeof authRoute;
