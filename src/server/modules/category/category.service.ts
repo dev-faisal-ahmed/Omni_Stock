@@ -32,7 +32,7 @@ export class CategoryService {
       }),
     };
 
-    const [categories, total] = await prisma.$transaction([
+    const [categories, total] = await Promise.all([
       prisma.category.findMany({
         where: categoryQuery,
         skip: pagination.skip,
