@@ -10,6 +10,11 @@ import { AddButton } from "@/components/action-button";
 
 const formId = "add-category-form";
 
+const defaultValues: TCategoryForm = {
+  name: "",
+  slug: "",
+};
+
 export function AddCategory() {
   const { open, onOpenChange } = usePopupState();
   const { invalidate } = useInvalidate();
@@ -30,12 +35,14 @@ export function AddCategory() {
   return (
     <>
       <AddButton onClick={() => onOpenChange(true)} />
-      <FormSheet open={open} onOpenChange={onOpenChange} title="Add Category" formId={formId}>
-        <CategoryForm
-          formId={formId}
-          onSubmit={onAddCategory}
-          defaultValues={{ name: "", slug: "" }}
-        />
+      <FormSheet
+        open={open}
+        onOpenChange={onOpenChange}
+        title="Add Category"
+        formId={formId}
+        preventClose
+      >
+        <CategoryForm formId={formId} onSubmit={onAddCategory} defaultValues={defaultValues} />
       </FormSheet>
     </>
   );

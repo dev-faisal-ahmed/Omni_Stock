@@ -21,7 +21,7 @@ type TFormSheetProps = {
   open: boolean;
   onOpenChange(open: boolean): void;
   isLoading?: boolean;
-  preventCloseOutside?: boolean;
+  preventClose?: boolean;
 };
 
 export function FormSheet({
@@ -31,15 +31,15 @@ export function FormSheet({
   title,
   isLoading,
   children,
-  preventCloseOutside,
+  preventClose,
 }: TFormSheetProps) {
   const handlePreventClose = (e: { preventDefault: () => void }) => {
-    if (preventCloseOutside) e.preventDefault();
+    if (preventClose) e.preventDefault();
   };
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        className="flex h-dvh flex-col p-0 md:max-w-200"
+        className="flex h-dvh flex-col p-0 data-[side=right]:sm:max-w-150 data-[side=left]:sm:max-w-150"
         onInteractOutside={handlePreventClose}
         onEscapeKeyDown={handlePreventClose}
       >

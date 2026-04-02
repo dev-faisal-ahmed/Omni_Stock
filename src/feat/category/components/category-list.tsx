@@ -10,6 +10,7 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "@/components/data-table";
 import { SearchInput } from "@/components/form/search-input";
 import { AddCategory } from "./add-category";
+import { UpdateCategory } from "./update-category";
 
 type TCategoryLocal = Awaited<ReturnType<typeof getCategoriesApi>>["data"][number];
 const { accessor: ca } = createColumnHelper<TCategoryLocal>();
@@ -46,6 +47,12 @@ export function CategoryList() {
       ca("name", { header: "Name" }),
       ca("slug", { header: "Slug" }),
       ca("productsCount", { header: "Products" }),
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          <UpdateCategory id={row.original.id} name={row.original.name} slug={row.original.slug} />
+        ),
+      },
     ] as ColumnDef<TCategoryLocal>[];
   }, [page, pageSize]);
 

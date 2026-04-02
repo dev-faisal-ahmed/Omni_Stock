@@ -1,5 +1,6 @@
 import { TrashIcon, PlusIcon, PencilSimpleIcon } from "@phosphor-icons/react";
 import { Button, type TButtonProps } from "./ui/button";
+import { ToolTipContainer } from "./tooltip-container";
 
 export function AddButton(props: TButtonProps) {
   return (
@@ -19,12 +20,16 @@ export function AddButton(props: TButtonProps) {
 //   );
 // }
 
-export function UpdateButton(props: TButtonProps) {
+type TUpdateButtonProps = TButtonProps & { tooltip: string };
+
+export function UpdateButton({ tooltip, ...props }: TUpdateButtonProps) {
   return (
-    <Button variant="outline" size="icon-lg" {...props}>
-      <PencilSimpleIcon className="size-4" />
-      <span className="sr-only">Edit category</span>
-    </Button>
+    <ToolTipContainer label={tooltip}>
+      <Button variant="outline" size="icon-lg" {...props}>
+        <PencilSimpleIcon className="size-4" />
+        <span className="sr-only">Edit category</span>
+      </Button>
+    </ToolTipContainer>
   );
 }
 
