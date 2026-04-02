@@ -48,7 +48,6 @@ export class ProductService {
           price: true,
           stock: true,
           minimumThreshold: true,
-          status: true,
           categoryId: true,
           category: {
             select: { id: true, name: true, slug: true },

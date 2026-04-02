@@ -8,11 +8,12 @@ import { FormField } from "@/components/form/form-field";
 import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategoriesApi } from "@/feat/category/category-api";
+import { Textarea } from "@/components/ui/textarea";
 import { QK } from "@/lib/cache-registry";
 
 type TProductFormProps = {
   formId: string;
-  defaultValues?: Partial<TProductForm>;
+  defaultValues?: Partial<TProductFormInput>;
   onSubmit: (formData: TProductForm) => void;
 };
 
@@ -33,7 +34,7 @@ export function ProductForm({ formId, defaultValues, onSubmit }: TProductFormPro
       </FormField>
 
       <FormField control={form.control} name="description" label="Description">
-        {({ field }) => <Input {...field} placeholder="Input Description (optional)" />}
+        {({ field }) => <Textarea {...field} placeholder="Input Description (optional)" />}
       </FormField>
 
       <FormField control={form.control} name="price" label="Price" required>

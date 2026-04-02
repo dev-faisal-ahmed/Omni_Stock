@@ -38,26 +38,20 @@ model Category {
 }
 
 model Product {
-  id               String        @id @default(ulid())
+  id               String   @id @default(ulid())
   categoryId       String
   name             String
   description      String?
   price            Float
   stock            Int
   minimumThreshold Int
-  status           ProductStatus @default(ACTIVE)
-  isDeleted        Boolean       @default(false)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  isDeleted        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   category Category @relation(fields: [categoryId], references: [id])
 
   @@map("products")
-}
-
-enum ProductStatus {
-  ACTIVE
-  OUT_OF_STOCK
 }
 
 model Order {

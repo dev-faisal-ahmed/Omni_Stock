@@ -12,7 +12,7 @@ import { SearchInput } from "@/components/form/search-input";
 import { AddProduct } from "./add-product";
 
 type TProductLocal = Awaited<ReturnType<typeof getProductsApi>>["data"][number];
-const { accessor: pa } = createColumnHelper<TProductLocal>();
+const { accessor } = createColumnHelper<TProductLocal>();
 
 export function ProductList() {
   const { pagination, setPagination } = usePagination();
@@ -43,18 +43,27 @@ export function ProductList() {
           return `#${offset + row.index + 1}`;
         },
       },
-      pa("name", { header: "Name" }),
+      accessor("name", { header: "Name" }),
       {
         header: "Category",
         cell: ({ row }) => row.original.category.name,
       },
-      pa("price", {
+      accessor("price", {
         header: "Price",
         cell: ({ getValue }) => `$${getValue().toFixed(2)}`,
       }),
-      pa("stock", { header: "Stock" }),
-      pa("minimumThreshold", { header: "Min. Threshold" }),
-      pa("status", { header: "Status" }),
+      accessor("stock", { header: "Stock" }),
+      accessor("minimumThreshold", { header: "Min. Threshold" }),
+      {
+        id: "status",
+        header: "Status",
+        cell: ({ row }) => {
+          const { stock } = row.original;
+
+          if (stock > 0) return <span className="text-green-500">Active</span>;
+          return <span className="text-red-500">Out of Stock</span>;
+        },
+      },
     ] as ColumnDef<TProductLocal>[];
   }, [page, pageSize]);
 

@@ -14,7 +14,7 @@ import { UpdateCategory } from "./update-category";
 import { DeleteCategory } from "./delete-category";
 
 type TCategoryLocal = Awaited<ReturnType<typeof getCategoriesApi>>["data"][number];
-const { accessor: ca } = createColumnHelper<TCategoryLocal>();
+const { accessor } = createColumnHelper<TCategoryLocal>();
 
 export function CategoryList() {
   const { pagination, setPagination } = usePagination();
@@ -45,9 +45,9 @@ export function CategoryList() {
           return `#${offset + row.index + 1}`;
         },
       },
-      ca("name", { header: "Name" }),
-      ca("slug", { header: "Slug" }),
-      ca("productsCount", { header: "Products" }),
+      accessor("name", { header: "Name" }),
+      accessor("slug", { header: "Slug" }),
+      accessor("productsCount", { header: "Products" }),
       {
         id: "actions",
         cell: ({ row }) => (

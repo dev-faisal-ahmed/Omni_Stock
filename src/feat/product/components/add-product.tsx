@@ -3,7 +3,7 @@
 import { FormSheet } from "@/components/form/form-sheet";
 import { usePopupState } from "@/hooks/use-popup-state";
 import { ProductForm } from "./form-product";
-import { TProductForm } from "../product-schema";
+import { TProductForm, TProductFormInput } from "../product-schema";
 import { useMutation } from "@tanstack/react-query";
 import { addProductApi } from "../product-api";
 import { useInvalidate } from "@/lib/cache-registry";
@@ -12,13 +12,13 @@ import { toast } from "sonner";
 
 const formId = "add-product-form";
 
-const defaultValues: TProductForm = {
+const defaultValues: TProductFormInput = {
   name: "",
   categoryId: "",
   description: "",
-  price: 0,
-  stock: 0,
-  minimumThreshold: 0,
+  price: "",
+  stock: "",
+  minimumThreshold: "",
 };
 
 export function AddProduct() {
