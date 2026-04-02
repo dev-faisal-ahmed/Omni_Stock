@@ -10,6 +10,18 @@ export const addCategoryDto = z
     return { ...data, slug: transformSlug(slugSource) };
   });
 
+export const updateCategoryDto = z
+  .object({
+    name: z.string().nonempty("Category name is required").trim().optional(),
+    slug: z.string().trim().optional(),
+  })
+  .transform((data) => {
+    if (data.slug !== undefined) {
+      return { ...data, slug: transformSlug(data.slug) };
+    }
+    return data;
+  });
+
 export const getCategoriesDto = z.object({
   search: z.string().trim().optional(),
   page: z.coerce.number().int().positive().catch(1),
@@ -26,4 +38,6 @@ function transformSlug(str: string) {
 
 export type AddCategoryDto = z.infer<typeof addCategoryDto>;
 export type AddCategoryInputDto = z.input<typeof addCategoryDto>;
+export type UpdateCategoryDto = z.infer<typeof updateCategoryDto>;
+export type UpdateCategoryInputDto = z.input<typeof updateCategoryDto>;
 export type GetCategoriesDto = z.infer<typeof getCategoriesDto>;
