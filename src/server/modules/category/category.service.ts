@@ -11,9 +11,8 @@ export class CategoryService {
       select: { id: true },
     });
 
-    if (isCategoryExist) {
+    if (isCategoryExist)
       throw new AppError("Category with the same slug already exists", "CONFLICT");
-    }
 
     const newCategory = await prisma.category.create({ data: dto });
     return newCategory;
@@ -24,6 +23,7 @@ export class CategoryService {
     const pagination = new Pagination(page, limit);
 
     const categoryQuery: CategoryWhereInput = {
+      isDeleted: false,
       ...(search && {
         OR: [
           { name: { contains: search, mode: "insensitive" } },

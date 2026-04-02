@@ -11,6 +11,7 @@ import { DataTable } from "@/components/data-table";
 import { SearchInput } from "@/components/form/search-input";
 import { AddCategory } from "./add-category";
 import { UpdateCategory } from "./update-category";
+import { DeleteCategory } from "./delete-category";
 
 type TCategoryLocal = Awaited<ReturnType<typeof getCategoriesApi>>["data"][number];
 const { accessor: ca } = createColumnHelper<TCategoryLocal>();
@@ -50,7 +51,14 @@ export function CategoryList() {
       {
         id: "actions",
         cell: ({ row }) => (
-          <UpdateCategory id={row.original.id} name={row.original.name} slug={row.original.slug} />
+          <div className="flex items-center justify-end gap-2">
+            <UpdateCategory
+              id={row.original.id}
+              name={row.original.name}
+              slug={row.original.slug}
+            />
+            <DeleteCategory id={row.original.id} />
+          </div>
         ),
       },
     ] as ColumnDef<TCategoryLocal>[];

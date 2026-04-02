@@ -33,11 +33,15 @@ export function UpdateButton({ tooltip, ...props }: TUpdateButtonProps) {
   );
 }
 
-export function DeleteButton(props: TButtonProps) {
+type TDeleteButtonProps = TButtonProps & { tooltip: string };
+
+export function DeleteButton({ tooltip, ...props }: TDeleteButtonProps) {
   return (
-    <Button variant="destructive" size="icon-lg" {...props}>
-      <TrashIcon className="size-4" />
-      <span className="sr-only">Delete</span>
-    </Button>
+    <ToolTipContainer label={tooltip}>
+      <Button variant="destructive" size="icon-lg" {...props}>
+        <TrashIcon className="size-4" />
+        <span className="sr-only">Delete</span>
+      </Button>
+    </ToolTipContainer>
   );
 }
