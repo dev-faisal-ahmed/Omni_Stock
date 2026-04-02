@@ -38,7 +38,7 @@ export class AuthService {
       where: { id: userId },
       select: { id: true, name: true, email: true, createdAt: true },
     });
-    
+
     if (!user) throw new AppError("User not found", "NOT_FOUND");
     return user;
   }

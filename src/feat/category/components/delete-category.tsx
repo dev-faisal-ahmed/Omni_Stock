@@ -1,3 +1,5 @@
+"use client";
+
 import { DeleteButton } from "@/components/action-button";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { usePopupState } from "@/hooks/use-popup-state";
@@ -14,7 +16,7 @@ export function DeleteCategory({ id }: TDeleteCategoryProps) {
   const { invalidate } = useInvalidate();
   const { open, onOpenChange } = usePopupState();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: deleteCategoryApi,
     onSuccess() {
       toast.success("Category Deleted Successfully");
@@ -26,7 +28,12 @@ export function DeleteCategory({ id }: TDeleteCategoryProps) {
   return (
     <>
       <DeleteButton tooltip="Delete category" onClick={() => onOpenChange(true)} />
-      <DeleteDialog open={open} onOpenChange={onOpenChange} onDelete={() => mutate(id)} />
+      <DeleteDialog
+        open={open}
+        onOpenChange={onOpenChange}
+        onDelete={() => mutate(id)}
+        isLoading={isPending}
+      />
     </>
   );
 }

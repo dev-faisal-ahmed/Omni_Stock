@@ -1,3 +1,5 @@
+"use client";
+
 import { FormSheet } from "@/components/form/form-sheet";
 import { usePopupState } from "@/hooks/use-popup-state";
 import { CategoryForm } from "./form-category";
@@ -20,7 +22,7 @@ export function UpdateCategory({ id, name, slug }: TUpdateCategoryProps) {
   const { open, onOpenChange } = usePopupState();
   const { invalidate } = useInvalidate();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: updateCategoryApi,
     onSuccess() {
       toast.success("Category Updated Successfully");
@@ -41,6 +43,7 @@ export function UpdateCategory({ id, name, slug }: TUpdateCategoryProps) {
         onOpenChange={onOpenChange}
         title="Update Category"
         formId={formId}
+        isLoading={isPending}
         preventClose
       >
         <CategoryForm formId={formId} onSubmit={onUpdateCategory} defaultValues={{ name, slug }} />

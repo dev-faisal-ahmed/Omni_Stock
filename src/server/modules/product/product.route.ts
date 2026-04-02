@@ -8,9 +8,7 @@ export const productRoute = new Hono()
   .post("/", jsonValidator(addProductDto), async (c) => {
     const dto = c.req.valid("json");
     const newProduct = await ProductService.addProduct(dto);
-    return c.json(
-      ResponseDto.success({ message: "Product added successfully", data: newProduct }),
-    );
+    return c.json(ResponseDto.success({ message: "Product added successfully", data: newProduct }));
   })
   .get("/", queryValidator(getProductsDto), async (c) => {
     const dto = c.req.valid("query");

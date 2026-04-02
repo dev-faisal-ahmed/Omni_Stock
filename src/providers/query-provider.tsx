@@ -31,7 +31,7 @@ function getQueryClient() {
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
     return browserQueryClient;
   }
-};
+}
 
 const TIME = 10 * 60 * 1000;
 
@@ -43,7 +43,7 @@ function makeQueryClient() {
       onError: onGlobalMutationError,
     }),
   });
-};
+}
 
 function onGlobalQueryError(error: DefaultError, query: unknown) {
   if (error instanceof Error) {
@@ -61,7 +61,7 @@ function onGlobalQueryError(error: DefaultError, query: unknown) {
   } else {
     console.error("Global: Unknown query error", error);
   }
-};
+}
 
 function onGlobalMutationError(error: DefaultError, mutation: unknown) {
   if (!isServerRuntime) errorToast(error);

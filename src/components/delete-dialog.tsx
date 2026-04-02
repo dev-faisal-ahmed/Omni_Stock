@@ -35,7 +35,7 @@ export function DeleteDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button variant="destructive" onClick={onDelete}>
+          <Button variant="destructive" onClick={onDelete} isLoading={isLoading}>
             {isLoading ? "Deleting..." : "Delete"}
           </Button>
         </AlertDialogFooter>

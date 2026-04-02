@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { categoryFormSchema, TCategoryForm } from "../category-schema";
 import { zodResolver } from "@hookform/resolvers/zod";

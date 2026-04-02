@@ -2,36 +2,40 @@
 
 import { FormSheet } from "@/components/form/form-sheet";
 import { usePopupState } from "@/hooks/use-popup-state";
-import { CategoryForm } from "./form-category";
-import { TCategoryForm } from "../category-schema";
+import { ProductForm } from "./form-product";
+import { TProductForm } from "../product-schema";
 import { useMutation } from "@tanstack/react-query";
-import { addCategoryApi } from "../category-api";
+import { addProductApi } from "../product-api";
 import { useInvalidate } from "@/lib/cache-registry";
 import { AddButton } from "@/components/action-button";
 import { toast } from "sonner";
 
-const formId = "add-category-form";
+const formId = "add-product-form";
 
-const defaultValues: TCategoryForm = {
+const defaultValues: TProductForm = {
   name: "",
-  slug: "",
+  categoryId: "",
+  description: "",
+  price: 0,
+  stock: 0,
+  minimumThreshold: 0,
 };
 
-export function AddCategory() {
+export function AddProduct() {
   const { open, onOpenChange } = usePopupState();
   const { invalidate } = useInvalidate();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: addCategoryApi,
+    mutationFn: addProductApi,
     onSuccess() {
-      toast.success("Category Added Successfully");
-      invalidate("categories");
+      toast.success("Product Added Successfully");
+      invalidate("products");
       onOpenChange(false);
     },
   });
 
-  const onAddCategory = (formData: TCategoryForm) => {
-    mutate({ name: formData.name, slug: formData.slug ?? "" });
+  const onAddProduct = (formData: TProductForm) => {
+    mutate(formData);
   };
 
   return (
@@ -40,12 +44,12 @@ export function AddCategory() {
       <FormSheet
         open={open}
         onOpenChange={onOpenChange}
-        title="Add Category"
+        title="Add Product"
         formId={formId}
         isLoading={isPending}
         preventClose
       >
-        <CategoryForm formId={formId} onSubmit={onAddCategory} defaultValues={defaultValues} />
+        <ProductForm formId={formId} onSubmit={onAddProduct} defaultValues={defaultValues} />
       </FormSheet>
     </>
   );

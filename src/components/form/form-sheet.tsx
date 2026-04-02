@@ -39,24 +39,24 @@ export function FormSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        className="flex h-dvh flex-col p-0 data-[side=right]:sm:max-w-150 data-[side=left]:sm:max-w-150"
+        className="flex h-dvh flex-col p-0 data-[side=left]:sm:max-w-150 data-[side=right]:sm:max-w-150"
         onInteractOutside={handlePreventClose}
         onEscapeKeyDown={handlePreventClose}
       >
-        <SheetHeader className="px-6 pt-6">
+        <SheetHeader className="px-4 pt-4">
           <SheetTitle>{title}</SheetTitle>
           <SheetDescription className="sr-only">Sheet</SheetDescription>
         </SheetHeader>
         <ScrollArea className="grow">
-          <section className="px-6">{children}</section>
+          <section className="px-4">{children}</section>
         </ScrollArea>
-        <SheetFooter className="flex-row items-center gap-4 px-6 pb-6">
+        <SheetFooter className="flex-row items-center gap-4 px-4 pb-4">
           <SheetClose asChild>
             <Button className="flex-1" variant="outline">
               Cancel
             </Button>
           </SheetClose>
-          <Button form={formId} type="submit" disabled={isLoading} className="flex-1">
+          <Button form={formId} type="submit" isLoading={isLoading} className="flex-1">
             {isLoading ? "Saving..." : "Save"}
           </Button>
         </SheetFooter>

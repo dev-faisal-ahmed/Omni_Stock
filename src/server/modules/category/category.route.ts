@@ -23,14 +23,18 @@ export const categoryRoute = new Hono()
     const id = c.req.param("id");
     const dto = c.req.valid("json");
     const updated = await CategoryService.updateCategory(id, dto);
-    return c.json(
-      ResponseDto.success({ message: "Category updated successfully", data: updated }),
-    );
+    return c.json(ResponseDto.success({ message: "Category updated successfully", data: updated }));
   })
   .delete("/:id", async (c) => {
     const id = c.req.param("id");
     await CategoryService.deleteCategory(id);
     return c.json(ResponseDto.success({ message: "Category deleted successfully", data: null }));
+  })
+  .get("/all", async (c) => {
+    const categories = await CategoryService.getAllCategoriesAll();
+    return c.json(
+      ResponseDto.success({ message: "Categories retrieved successfully", data: categories }),
+    );
   });
 
 export type TCategoryRoute = typeof categoryRoute;

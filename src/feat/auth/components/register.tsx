@@ -68,7 +68,7 @@ export function Register() {
           </FormField>
 
           <div className="pt-2">
-            <Button type="submit" className="w-full" disabled={isPending}>
+            <Button type="submit" className="w-full" isLoading={isPending}>
               {isPending ? "Creating Account..." : "Create Account"}
             </Button>
           </div>

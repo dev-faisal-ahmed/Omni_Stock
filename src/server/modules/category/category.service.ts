@@ -87,4 +87,13 @@ export class CategoryService {
     if (!category) throw new AppError("Category not found", "NOT_FOUND");
     await prisma.category.update({ where: { id }, data: { isDeleted: true } });
   }
+
+  static async getAllCategoriesAll() {
+    const categories = await prisma.category.findMany({
+      where: { isDeleted: false },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+    return categories;
+  }
 }

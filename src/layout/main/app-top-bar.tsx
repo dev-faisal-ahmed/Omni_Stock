@@ -36,7 +36,7 @@ function ActionMenu() {
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange} modal>
       <DropdownMenuTrigger asChild>
-        <div className="flex gap-2 items-center">
+        <div className="flex items-center gap-2">
           <CommonAvatar
             name={user.name ?? ""}
             fallbackClassName="bg-primary text-white"
