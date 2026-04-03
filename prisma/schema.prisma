@@ -17,11 +17,17 @@ model User {
   name      String
   email     String   @unique
   password  String
+  role      UserRole @default(MANAGER)
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
 }
 
 model Category {

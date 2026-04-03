@@ -10,13 +10,8 @@ export class AuthService {
 
     const hashedPassword = await AuthUtils.hashPassword(dto.password);
     const newUser = await prisma.user.create({
-      data: {
-        ...dto,
-        password: hashedPassword,
-      },
-      select: {
-        id: true,
-      },
+      data: { ...dto, password: hashedPassword },
+      select: { id: true },
     });
 
     return newUser;

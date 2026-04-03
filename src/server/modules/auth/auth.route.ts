@@ -1,11 +1,10 @@
 import { Hono } from "hono";
-import { deleteCookie, getCookie, setCookie } from "hono/cookie";
+import { deleteCookie, setCookie } from "hono/cookie";
 import { jsonValidator } from "@/server/utils/validator";
 import { loginDto, registerDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
 import { ResponseDto } from "@/server/utils/response.dto";
-import { AuthUtils } from "./auth.utils";
-import { AppError } from "@/server/utils/app.error";
+import { authGuard } from "@/server/utils/auth.guard";
 
 export const authRoute = new Hono()
   .post("/register", jsonValidator(registerDto), async (c) => {
@@ -21,13 +20,11 @@ export const authRoute = new Hono()
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: "/",
     });
+
     return c.json(ResponseDto.success("Logged in successfully"));
   })
-  .get("/me", async (c) => {
-    const token = getCookie(c, "token");
-    if (!token) throw new AppError("Not authenticated", "UNAUTHORIZED");
-    const payload = await AuthUtils.verifyToken(token);
-    const user = await AuthService.me(payload.userId as string);
+  .get("/me", authGuard(), async (c) => {
+    const user = c.get("user");
     return c.json(ResponseDto.success({ message: "User fetched", data: user }));
   })
   .post("/logout", async (c) => {
