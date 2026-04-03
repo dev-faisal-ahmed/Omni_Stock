@@ -21,3 +21,11 @@ export async function meApi() {
   if (!resData.success) throw new Error(resData.message);
   return resData;
 }
+
+export async function logoutApi() {
+  const res = await authClient.logout.$post();
+  if (res.redirected) {
+    window.location.href = res.url;
+    return;
+  }
+}

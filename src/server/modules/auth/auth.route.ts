@@ -29,7 +29,7 @@ export const authRoute = new Hono()
   })
   .post("/logout", async (c) => {
     deleteCookie(c, "token", { path: "/" });
-    return c.json(ResponseDto.success("Logged out successfully"));
+    return c.redirect("/login");
   });
 
 export type TAuthRoute = typeof authRoute;

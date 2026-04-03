@@ -77,6 +77,19 @@ export function Login() {
               Create one
             </Link>
           </p>
+
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => {
+                form.setValue("email", process.env.NEXT_PUBLIC_DEMO_USER_EMAIL || "");
+                form.setValue("password", process.env.NEXT_PUBLIC_DEMO_USER_PASSWORD || "");
+              }}
+              className="text-primary hover:text-primary/80 cursor-pointer text-xs font-semibold underline transition-colors"
+            >
+              Use demo credentials
+            </button>
+          </div>
         </form>
       </div>
     </section>

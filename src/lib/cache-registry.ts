@@ -15,5 +15,9 @@ export const useInvalidate = () => {
     keys.forEach((key) => qc.invalidateQueries({ queryKey: [key] }));
   };
 
-  return { invalidate };
+  const invalidateAll = () => {
+    qc.clear();
+  };
+
+  return { invalidate, invalidateAll };
 };
