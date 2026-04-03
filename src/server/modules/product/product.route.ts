@@ -1,11 +1,11 @@
-import { Hono } from "hono";
-import { jsonValidator, queryValidator } from "@/server/utils/validator";
 import {
   addProductDto,
   getProductsDto,
   increaseProductStockDto,
   updateProductDto,
 } from "./product.dto";
+import { Hono } from "hono";
+import { jsonValidator, queryValidator } from "@/server/utils/validator";
 import { ProductService } from "./product.service";
 import { ResponseDto } from "@/server/utils/response.dto";
 

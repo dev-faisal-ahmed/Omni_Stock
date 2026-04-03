@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import type { ReactNode } from "react";
 
 import {
   Table,
@@ -19,7 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 type TDataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  header?: React.ReactNode;
+  header?: ReactNode;
   isLoading?: boolean;
   message?: string;
   pagination: TPagination;
@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="bg-muted">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="py-4">
+                  <TableHead key={header.id} className="p-4">
                     {header.isPlaceholder && null}
                     {!header.isPlaceholder &&
                       flexRender(header.column.columnDef.header, header.getContext())}
@@ -136,7 +136,7 @@ function DataTableBody<TData, TValue>({
       {rows.map((row) => (
         <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
           {row.getVisibleCells().map((cell) => (
-            <TableCell key={cell.id} className="py-4">
+            <TableCell key={cell.id} className="p-4">
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </TableCell>
           ))}

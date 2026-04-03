@@ -10,6 +10,7 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "@/components/data-table";
 import { SearchInput } from "@/components/form/search-input";
 import { AddProduct } from "./add-product";
+import { UpdateProduct } from "./update-product";
 
 type TProductLocal = Awaited<ReturnType<typeof getProductsApi>>["data"][number];
 const { accessor } = createColumnHelper<TProductLocal>();
@@ -50,7 +51,7 @@ export function ProductList() {
       },
       accessor("price", {
         header: "Price",
-        cell: ({ getValue }) => `$${getValue().toFixed(2)}`,
+        cell: ({ getValue }) => `${getValue().toFixed(2)} ৳`,
       }),
       accessor("stock", { header: "Stock" }),
       accessor("minimumThreshold", { header: "Min. Threshold" }),
@@ -63,6 +64,22 @@ export function ProductList() {
           if (stock > 0) return <span className="text-green-500">Active</span>;
           return <span className="text-red-500">Out of Stock</span>;
         },
+      },
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          <div className="flex items-center justify-end gap-2">
+            <UpdateProduct
+              id={row.original.id}
+              name={row.original.name}
+              categoryId={row.original.categoryId}
+              description={row.original.description}
+              price={row.original.price}
+              stock={row.original.stock}
+              minimumThreshold={row.original.minimumThreshold}
+            />
+          </div>
+        ),
       },
     ] as ColumnDef<TProductLocal>[];
   }, [page, pageSize]);

@@ -13,11 +13,12 @@ import { QK } from "@/lib/cache-registry";
 
 type TProductFormProps = {
   formId: string;
+  mode?: "add" | "edit";
   defaultValues?: Partial<TProductFormInput>;
   onSubmit: (formData: TProductForm) => void;
 };
 
-export function ProductForm({ formId, defaultValues, onSubmit }: TProductFormProps) {
+export function ProductForm({ formId, mode = "add", defaultValues, onSubmit }: TProductFormProps) {
   const form = useForm<TProductFormInput, unknown, TProductForm>({
     resolver: zodResolver(productFormSchema),
     defaultValues,
@@ -51,12 +52,13 @@ export function ProductForm({ formId, defaultValues, onSubmit }: TProductFormPro
         )}
       </FormField>
 
-      <FormField control={form.control} name="stock" label="Stock" required>
+      <FormField control={form.control} name="stock" label="Stock" required={mode === "add"}>
         {({ field: { onChange, value, ...field } }) => (
           <Input
             {...field}
             value={value as number}
             onChange={(e) => onChange(e.target.value)}
+            disabled={mode === "edit"}
             type="number"
             min={0}
             placeholder="0"

@@ -49,7 +49,12 @@ export function AddProduct() {
         isLoading={isPending}
         preventClose
       >
-        <ProductForm formId={formId} onSubmit={onAddProduct} defaultValues={defaultValues} />
+        <ProductForm
+          formId={formId}
+          mode="add"
+          onSubmit={onAddProduct}
+          defaultValues={defaultValues}
+        />
       </FormSheet>
     </>
   );
