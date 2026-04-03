@@ -97,7 +97,7 @@ function SidebarLink({ url, icon: Icon, title, items, isActive }: TSidebarItem) 
               {items.map(({ title, url, isActive }) => (
                 <SidebarMenuSubItem key={url} className="w-full">
                   <SidebarMenuSubButton asChild isActive={isActive}>
-                    <Link className="text-muted-foreground" href={url}>
+                    <Link className="text-muted-foreground text-sm" href={url}>
                       <span>{title}</span>
                     </Link>
                   </SidebarMenuSubButton>

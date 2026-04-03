@@ -1,10 +1,10 @@
-import { ToString } from "@/lib/types";
 import {
   AddProductDto,
   GetProductsDto,
   IncreaseProductStockDto,
   UpdateProductInputDto,
 } from "@/server/modules/product/product.dto";
+import { ToString } from "@/lib/types";
 import { productClient } from "@/lib/client";
 
 export async function addProductApi(dto: AddProductDto) {
@@ -35,8 +35,18 @@ export async function deleteProductApi(id: string) {
   return resData;
 }
 
-export async function increaseProductStockApi({ id, amount }: IncreaseProductStockDto & { id: string }) {
+export async function increaseProductStockApi({
+  id,
+  amount,
+}: IncreaseProductStockDto & { id: string }) {
   const res = await productClient[":id"].stock.$patch({ param: { id }, json: { amount } });
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}
+
+export async function getAllProductsApi() {
+  const res = await productClient.all.$get();
   const resData = await res.json();
   if (!resData.success) throw new Error(resData.message);
   return resData;

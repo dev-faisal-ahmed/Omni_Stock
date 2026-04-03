@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import {
   ChartLineIcon,
   ListChecksIcon,
@@ -8,13 +7,8 @@ import {
   SquaresFourIcon,
   TagIcon,
 } from "@phosphor-icons/react";
-import React from "react";
-
-type TNavSubItem = {
-  title: string;
-  url: string;
-  isActive: boolean;
-};
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
 
 type TNavItem = {
   title: string;
@@ -24,21 +18,63 @@ type TNavItem = {
   items?: TNavSubItem[];
 };
 
-const ROUTES = [
-  { title: "Dashboard", url: "/", icon: SquaresFourIcon },
-  { title: "Categories", url: "/categories", icon: TagIcon },
-  { title: "Products", url: "/products", icon: PackageIcon },
-  { title: "Orders", url: "/orders", icon: ListChecksIcon },
-  { title: "Analytics", url: "/analytics", icon: ChartLineIcon },
-] as const;
+type TNavSubItem = {
+  title: string;
+  url: string;
+  isActive: boolean;
+};
 
-export const useNavItems = () => {
+export function useNavItems() {
   const pathname = usePathname();
 
-  const navItems: TNavItem[] = ROUTES.map((item) => ({
-    ...item,
-    isActive: pathname === item.url,
-  }));
+  const navItems = useMemo(() => {
+    const exactMatch = (url: string) => pathname === url;
+    const partialMatch = (url: string) => pathname.startsWith(url);
+
+    return [
+      {
+        title: "Dashboard",
+        url: "/",
+        icon: SquaresFourIcon,
+        isActive: exactMatch("/"),
+      },
+      {
+        title: "Categories",
+        url: "/categories",
+        icon: TagIcon,
+        isActive: exactMatch("/categories"),
+      },
+      {
+        title: "Products",
+        url: "/products",
+        icon: PackageIcon,
+        isActive: exactMatch("/products"),
+      },
+      {
+        title: "Orders",
+        url: "/orders",
+        icon: ListChecksIcon,
+        isActive: partialMatch("/order"),
+        items: [
+          {
+            title: "Add New Order",
+            url: "/orders/new",
+            isActive: exactMatch("/orders/new"),
+          },
+          {
+            title: "All Orders",
+            url: "/orders",
+            isActive: exactMatch("/orders"),
+          },
+        ],
+      },
+      {
+        title: "Analytics",
+        url: "/analytics",
+        icon: ChartLineIcon,
+      },
+    ] as TNavItem[];
+  }, [pathname]);
 
   return { navItems };
-};
+}

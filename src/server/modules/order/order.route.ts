@@ -5,12 +5,15 @@ import { OrderService } from "./order.service";
 import { ResponseDto } from "@/server/utils/response.dto";
 import { authGuard } from "@/server/utils/auth.guard";
 
-export const orderRoute = new Hono()
-  .post("/", authGuard(), jsonValidator(createOrderDto), async (c) => {
+export const orderRoute = new Hono().post(
+  "/",
+  authGuard(),
+  jsonValidator(createOrderDto),
+  async (c) => {
     const payload = c.req.valid("json");
     const newOrder = await OrderService.createOrder(payload);
-    
     return c.json(ResponseDto.success({ message: "Order created successfully", data: newOrder }));
-  });
+  },
+);
 
 export type TOrderRoute = typeof orderRoute;

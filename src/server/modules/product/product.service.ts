@@ -1,11 +1,11 @@
-import { prisma } from "@/server/db";
-import { AppError } from "@/server/utils/app.error";
 import {
   AddProductDto,
   GetProductsDto,
   IncreaseProductStockDto,
   UpdateProductDto,
 } from "./product.dto";
+import { prisma } from "@/server/db";
+import { AppError } from "@/server/utils/app.error";
 import { Pagination } from "@/server/utils/pagination";
 import { ProductWhereInput } from "@/generated/prisma/models";
 
@@ -29,7 +29,7 @@ export class ProductService {
     return newProduct;
   }
 
-  static async getAllProducts(dto: GetProductsDto) {
+  static async getProducts(dto: GetProductsDto) {
     const { search, categoryId, page, limit } = dto;
     const pagination = new Pagination(page, limit);
 
@@ -66,6 +66,21 @@ export class ProductService {
       products,
       meta: pagination.getMeta(total),
     };
+  }
+
+  static async getAllProducts() {
+    const products = await prisma.product.findMany({
+      where: { isDeleted: false },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        stock: true,
+        minimumThreshold: true,
+      },
+    });
+
+    return products;
   }
 
   static async updateProduct(id: string, dto: UpdateProductDto) {
