@@ -55,7 +55,7 @@ export class ProductService {
           minimumThreshold: true,
           categoryId: true,
           category: {
-            select: { id: true, name: true, slug: true },
+            select: { id: true, name: true },
           },
         },
       }),

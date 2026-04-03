@@ -12,6 +12,7 @@ import { SearchInput } from "@/components/form/search-input";
 import { AddProduct } from "./add-product";
 import { UpdateProduct } from "./update-product";
 import { DeleteProduct } from "./delete-product";
+import { ProductDetails } from "./product-details";
 
 type TProductLocal = Awaited<ReturnType<typeof getProductsApi>>["data"][number];
 const { accessor } = createColumnHelper<TProductLocal>();
@@ -70,6 +71,7 @@ export function ProductList() {
         id: "actions",
         cell: ({ row }) => (
           <div className="flex items-center justify-end gap-2">
+            <ProductDetails product={row.original} />
             <UpdateProduct
               id={row.original.id}
               name={row.original.name}

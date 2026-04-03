@@ -1,4 +1,4 @@
-import { TrashIcon, PlusIcon, PencilSimpleIcon } from "@phosphor-icons/react";
+import { TrashIcon, PlusIcon, PencilSimpleIcon, EyeIcon } from "@phosphor-icons/react";
 import { Button, type TButtonProps } from "./ui/button";
 import { ToolTipContainer } from "./tooltip-container";
 
@@ -11,14 +11,18 @@ export function AddButton(props: TButtonProps) {
   );
 }
 
-// export function ViewButton(props: TButtonProps) {
-//   return (
-//     <Button variant="secondary" size="icon-lg" {...props}>
-//       <EyeIcon className="size-4" />
-//       <span className="sr-only">View details</span>
-//     </Button>
-//   );
-// }
+type TViewButtonProps = TButtonProps & { tooltip: string };
+
+export function ViewButton({ tooltip, ...props }: TViewButtonProps) {
+  return (
+    <ToolTipContainer label={tooltip}>
+      <Button variant="secondary" size="icon-lg" {...props}>
+        <EyeIcon className="size-4" />
+        <span className="sr-only">View details</span>
+      </Button>
+    </ToolTipContainer>
+  );
+}
 
 type TUpdateButtonProps = TButtonProps & { tooltip: string };
 
