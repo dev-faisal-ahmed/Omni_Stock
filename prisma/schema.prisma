@@ -61,12 +61,12 @@ model Product {
 }
 
 model Order {
-  id         String      @id @default(ulid())
-  customerId String
-  totalPrice Float
-  status     OrderStatus @default(PENDING)
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id           String      @id @default(ulid())
+  customerName String
+  totalPrice   Float
+  status       OrderStatus @default(PENDING)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
 
   @@map("orders")
 }

@@ -5,6 +5,7 @@ import { authRoute } from "./modules/auth/auth.route";
 import { errorHandler } from "./utils/error.handler";
 import { categoryRoute } from "./modules/category/category.route";
 import { productRoute } from "./modules/product/product.route";
+import { orderRoute } from "./modules/order/order.route";
 
 export const app = new Hono()
   .basePath("/api/v1")
@@ -13,4 +14,5 @@ export const app = new Hono()
   .route("/auth", authRoute)
   .route("/categories", categoryRoute)
   .route("/products", productRoute)
+  .route("/orders", orderRoute)
   .onError(errorHandler);
