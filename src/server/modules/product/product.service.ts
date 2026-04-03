@@ -1,6 +1,11 @@
 import { prisma } from "@/server/db";
 import { AppError } from "@/server/utils/app.error";
-import { AddProductDto, GetProductsDto } from "./product.dto";
+import {
+  AddProductDto,
+  GetProductsDto,
+  IncreaseProductStockDto,
+  UpdateProductDto,
+} from "./product.dto";
 import { Pagination } from "@/server/utils/pagination";
 import { ProductWhereInput } from "@/generated/prisma/models";
 
@@ -61,5 +66,66 @@ export class ProductService {
       products,
       meta: pagination.getMeta(total),
     };
+  }
+
+  static async updateProduct(id: string, dto: UpdateProductDto) {
+    const product = await prisma.product.findUnique({
+      where: { id, isDeleted: false },
+      select: { id: true },
+    });
+
+    if (!product) throw new AppError("Product not found", "NOT_FOUND");
+
+    const [category, productWithName] = await Promise.all([
+      dto.categoryId
+        ? prisma.category.findUnique({
+            where: { id: dto.categoryId, isDeleted: false },
+            select: { id: true },
+          })
+        : null,
+
+      dto.name
+        ? prisma.product.findFirst({
+            where: {
+              name: { equals: dto.name, mode: "insensitive" },
+              isDeleted: false,
+              NOT: { id },
+            },
+          })
+        : null,
+    ]);
+
+    if (dto.categoryId && !category) throw new AppError("Category not found", "NOT_FOUND");
+    if (dto.name && productWithName)
+      throw new AppError("Product with the same name already exists", "CONFLICT");
+
+    const updated = await prisma.product.update({ where: { id }, data: dto });
+    return updated;
+  }
+
+  static async deleteProduct(id: string) {
+    const product = await prisma.product.findUnique({
+      where: { id, isDeleted: false },
+      select: { id: true },
+    });
+
+    if (!product) throw new AppError("Product not found", "NOT_FOUND");
+    await prisma.product.update({ where: { id }, data: { isDeleted: true } });
+  }
+
+  static async increaseProductStock(id: string, dto: IncreaseProductStockDto) {
+    const product = await prisma.product.findUnique({
+      where: { id, isDeleted: false },
+      select: { id: true },
+    });
+
+    if (!product) throw new AppError("Product not found", "NOT_FOUND");
+
+    const updated = await prisma.product.update({
+      where: { id },
+      data: { stock: { increment: dto.amount } },
+    });
+
+    return updated;
   }
 }

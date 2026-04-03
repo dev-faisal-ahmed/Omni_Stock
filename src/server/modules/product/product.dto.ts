@@ -16,5 +16,31 @@ export const addProductDto = z.object({
   minimumThreshold: z.number().int().nonnegative("Minimum threshold cannot be negative"),
 });
 
+export const updateProductDto = z
+  .object({
+    name: z.string().trim().nonempty("Product name is required").optional(),
+    categoryId: z.string().nonempty("Category ID is required").optional(),
+    description: z.string().trim().optional(),
+    price: z.number().nonnegative("Price cannot be negative").optional(),
+    minimumThreshold: z
+      .number()
+      .int()
+      .nonnegative("Minimum threshold cannot be negative")
+      .optional(),
+  })
+  .strict()
+  .refine((data) => Object.keys(data).length > 0, {
+    message: "At least one field is required",
+  });
+
+export const increaseProductStockDto = z
+  .object({
+    amount: z.number().int().positive("Amount must be greater than zero"),
+  })
+  .strict();
+
 export type AddProductDto = z.infer<typeof addProductDto>;
 export type GetProductsDto = z.infer<typeof getProductsDto>;
+export type UpdateProductDto = z.infer<typeof updateProductDto>;
+export type UpdateProductInputDto = z.input<typeof updateProductDto>;
+export type IncreaseProductStockDto = z.infer<typeof increaseProductStockDto>;
