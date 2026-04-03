@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import { PropsWithChildren } from "react";
 import { QueryProvider } from "@/providers/query-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
@@ -28,8 +29,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
-        "dark h-full antialiased",
+        "h-full antialiased",
         geistSans.variable,
         geistMono.variable,
         "font-mono",
@@ -37,8 +39,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
       )}
     >
       <body className="flex min-h-full flex-col">
-        <QueryProvider>{children}</QueryProvider>
-        <Toaster richColors duration={2000} />
+        <ThemeProvider>
+          <QueryProvider>{children}</QueryProvider>
+          <Toaster richColors duration={2000} />
+        </ThemeProvider>
       </body>
     </html>
   );

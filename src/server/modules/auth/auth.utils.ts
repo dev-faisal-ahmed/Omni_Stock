@@ -22,6 +22,7 @@ export class AuthUtils {
   }
 
   static async verifyToken(token: string) {
-    return verify(token, JWT_SECRET, { alg: "HS256" });
+    const tokenPayload = await verify(token, JWT_SECRET, { alg: "HS256" });
+    return tokenPayload as { userId: string };
   }
 }

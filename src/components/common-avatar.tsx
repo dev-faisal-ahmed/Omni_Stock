@@ -11,7 +11,7 @@ type TAvatarSize = "XS" | "SM" | "MD" | "LG";
 
 const sizeMap: Record<TAvatarSize, string> = {
   XS: "size-6 text-[10px]",
-  SM: "size-8 text-xs",
+  SM: "size-8 text-sm",
   MD: "size-10 text-sm",
   LG: "size-12 text-base",
 };
@@ -32,7 +32,7 @@ export function CommonAvatar({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center justify-center rounded-full font-semibold",
+        "flex shrink-0 items-center justify-center font-semibold",
         sizeMap[size],
         fallbackClassName,
         className,

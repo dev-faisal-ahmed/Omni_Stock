@@ -20,10 +20,10 @@ export function authGuard(...roles: UserRole[]) {
     if (!token) throw new AppError("Not authenticated", "UNAUTHORIZED");
 
     const payload = await AuthUtils.verifyToken(token);
-    if (payload?.userId) throw new AppError("Invalid token payload", "UNAUTHORIZED");
+    if (!payload?.userId) throw new AppError("Invalid token payload", "UNAUTHORIZED");
 
     const user = await prisma.user.findUnique({
-      where: { id: payload.userId as string },
+      where: { id: payload.userId },
       select: {
         id: true,
         name: true,
