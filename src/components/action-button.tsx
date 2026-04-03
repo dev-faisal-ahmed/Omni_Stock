@@ -1,4 +1,4 @@
-import { TrashIcon, PlusIcon, PencilSimpleIcon, EyeIcon } from "@phosphor-icons/react";
+import { TrashIcon, PlusIcon, PencilSimpleIcon, EyeIcon, PackageIcon } from "@phosphor-icons/react";
 import { Button, type TButtonProps } from "./ui/button";
 import { ToolTipContainer } from "./tooltip-container";
 
@@ -45,6 +45,19 @@ export function DeleteButton({ tooltip, ...props }: TDeleteButtonProps) {
       <Button variant="destructive" size="icon-lg" {...props}>
         <TrashIcon className="size-4" />
         <span className="sr-only">Delete</span>
+      </Button>
+    </ToolTipContainer>
+  );
+}
+
+type TRestockButtonProps = TButtonProps & { tooltip: string };
+
+export function RestockButton({ tooltip, ...props }: TRestockButtonProps) {
+  return (
+    <ToolTipContainer label={tooltip}>
+      <Button variant="default" className="bg-emerald-600 hover:bg-emerald-700 text-white" size="icon-lg" {...props}>
+        <PackageIcon className="size-4" />
+        <span className="sr-only">Restock</span>
       </Button>
     </ToolTipContainer>
   );

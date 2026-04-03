@@ -12,5 +12,14 @@ export const productFormSchema = z.object({
     .nonnegative("Minimum threshold cannot be negative"),
 });
 
+export const restockProductSchema = z.object({
+  amount: z.coerce
+    .number({ message: "Amount is required" })
+    .int()
+    .positive("Must restock a positive amount"),
+});
+
 export type TProductForm = z.infer<typeof productFormSchema>;
+export type TRestockProductFormInput = z.input<typeof restockProductSchema>;
 export type TProductFormInput = z.input<typeof productFormSchema>;
+export type TRestockProductForm = z.infer<typeof restockProductSchema>;

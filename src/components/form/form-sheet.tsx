@@ -36,15 +36,16 @@ export function FormSheet({
   const handlePreventClose = (e: { preventDefault: () => void }) => {
     if (preventClose) e.preventDefault();
   };
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
-        className="flex h-dvh flex-col p-0 data-[side=left]:sm:max-w-150 data-[side=right]:sm:max-w-150"
+        className="flex h-dvh flex-col p-0 data-[side=left]:sm:max-w-150 data-[side=right]:sm:max-w-160"
         onInteractOutside={handlePreventClose}
         onEscapeKeyDown={handlePreventClose}
       >
         <SheetHeader className="px-4 pt-4">
-          <SheetTitle>{title}</SheetTitle>
+          <SheetTitle className="text-lg">{title}</SheetTitle>
           <SheetDescription className="sr-only">Sheet</SheetDescription>
         </SheetHeader>
         <ScrollArea className="grow">

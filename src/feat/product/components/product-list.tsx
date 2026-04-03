@@ -5,7 +5,6 @@ import { useSearch } from "@/hooks/use-search";
 import { QK } from "@/lib/cache-registry";
 import { useQuery } from "@tanstack/react-query";
 import { getProductsApi } from "../product-api";
-import { useMemo } from "react";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "@/components/data-table";
 import { SearchInput } from "@/components/form/search-input";
@@ -13,6 +12,8 @@ import { AddProduct } from "./add-product";
 import { UpdateProduct } from "./update-product";
 import { DeleteProduct } from "./delete-product";
 import { ProductDetails } from "./product-details";
+import { ReStockProduct } from "./re-stock-product";
+import { useMemo } from "react";
 
 type TProductLocal = Awaited<ReturnType<typeof getProductsApi>>["data"][number];
 const { accessor } = createColumnHelper<TProductLocal>();
@@ -72,6 +73,7 @@ export function ProductList() {
         cell: ({ row }) => (
           <div className="flex items-center justify-end gap-2">
             <ProductDetails product={row.original} />
+            <ReStockProduct id={row.original.id} currentStock={row.original.stock} />
             <UpdateProduct
               id={row.original.id}
               name={row.original.name}
