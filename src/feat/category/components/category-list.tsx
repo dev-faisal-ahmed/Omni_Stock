@@ -73,6 +73,9 @@ export function CategoryList() {
       totalPage={meta?.totalPage ?? 0}
       isLoading={isLoading}
       header={<CategoryListHeader value={search} onChange={setSearch} />}
+      className={{
+        body: "h-[calc(100vh-14.5rem)]",
+      }}
     />
   );
 }

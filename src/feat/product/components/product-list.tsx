@@ -11,6 +11,7 @@ import { DataTable } from "@/components/data-table";
 import { SearchInput } from "@/components/form/search-input";
 import { AddProduct } from "./add-product";
 import { UpdateProduct } from "./update-product";
+import { DeleteProduct } from "./delete-product";
 
 type TProductLocal = Awaited<ReturnType<typeof getProductsApi>>["data"][number];
 const { accessor } = createColumnHelper<TProductLocal>();
@@ -78,6 +79,7 @@ export function ProductList() {
               stock={row.original.stock}
               minimumThreshold={row.original.minimumThreshold}
             />
+            <DeleteProduct id={row.original.id} />
           </div>
         ),
       },
@@ -93,6 +95,9 @@ export function ProductList() {
       totalPage={meta?.totalPage ?? 0}
       isLoading={isLoading}
       header={<ProductListHeader value={search} onChange={setSearch} />}
+      className={{
+        body: "h-[calc(100vh-14.5rem)]",
+      }}
     />
   );
 }
