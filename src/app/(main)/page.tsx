@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-4">
       <Summary />
-      <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
+      <div className="grid gap-4 lg:grid-cols-2 lg:gap-4">
         <ProductSummary />
         <ActivityList />
       </div>
