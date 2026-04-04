@@ -29,6 +29,17 @@ export const updateOrderStatusDto = z.object({
   status: z.enum(Object.values(Object.values(OrderStatus)), "Invalid order status"),
 });
 
+export const getOrderSummaryDto = z
+  .object({
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
+  })
+  .refine((data) => !(data.startDate && data.endDate) || data.startDate <= data.endDate, {
+    message: "startDate must be less than or equal to endDate",
+    path: ["startDate"],
+  });
+
 export type CreateOrderDto = z.infer<typeof createOrderDto>;
 export type GetOrdersDto = z.infer<typeof getOrdersDto>;
 export type UpdateOrderStatusDto = z.infer<typeof updateOrderStatusDto>;
+export type GetOrderSummaryDto = z.infer<typeof getOrderSummaryDto>;

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { jsonValidator, queryValidator } from "@/server/utils/validator";
-import { createOrderDto, getOrdersDto, updateOrderStatusDto } from "./order.dto";
+import { createOrderDto, getOrdersDto, updateOrderStatusDto, getOrderSummaryDto } from "./order.dto";
 import { OrderService } from "./order.service";
 import { ResponseDto } from "@/server/utils/response.dto";
 import { authGuard } from "@/server/utils/auth.guard";
@@ -24,6 +24,13 @@ export const orderRoute = new Hono()
     const updated = await OrderService.updateOrderStatus(id, dto);
     return c.json(
       ResponseDto.success({ message: "Order status updated successfully", data: updated }),
+    );
+  })
+  .get("/summary", authGuard(), queryValidator(getOrderSummaryDto), async (c) => {
+    const dto = c.req.valid("query");
+    const summary = await OrderService.getOrderSummary(dto);
+    return c.json(
+      ResponseDto.success({ message: "Order summary retrieved successfully", data: summary }),
     );
   });
 

@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ChartLineIcon,
-  ListChecksIcon,
-  PackageIcon,
-  SquaresFourIcon,
-  TagIcon,
-} from "@phosphor-icons/react";
+import { ListChecksIcon, PackageIcon, SquaresFourIcon, TagIcon } from "@phosphor-icons/react";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 
@@ -79,11 +73,6 @@ export function useNavItems() {
             isActive: exactMatch("/orders"),
           },
         ],
-      },
-      {
-        title: "Analytics",
-        url: "/analytics",
-        icon: ChartLineIcon,
       },
     ] as TNavItem[];
   }, [pathname]);

@@ -1,5 +1,5 @@
 import { orderClient } from "@/lib/client";
-import { CreateOrderDto } from "@/server/modules/order/order.dto";
+import { CreateOrderDto, GetOrderSummaryDto } from "@/server/modules/order/order.dto";
 import { OrderStatus } from "@/generated/prisma/enums";
 
 export async function createOrderApi(dto: CreateOrderDto) {
@@ -25,6 +25,14 @@ export async function getOrdersApi(query: TGetOrdersApiQuery) {
 
 export async function updateOrderStatusApi(id: string, status: OrderStatus) {
   const res = await orderClient[":id"].$patch({ param: { id }, json: { status } });
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}
+
+export async function getOrderSummaryApi(params: GetOrderSummaryDto) {
+  const res = await orderClient.summary.$get({ query: params });
+
   const resData = await res.json();
   if (!resData.success) throw new Error(resData.message);
   return resData;

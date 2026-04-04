@@ -2,7 +2,12 @@ import { prisma } from "@/server/db";
 import { AppError } from "@/server/utils/app.error";
 import { Pagination } from "@/server/utils/pagination";
 import { OrderWhereInput } from "@/generated/prisma/models";
-import { CreateOrderDto, GetOrdersDto, UpdateOrderStatusDto } from "./order.dto";
+import {
+  CreateOrderDto,
+  GetOrdersDto,
+  UpdateOrderStatusDto,
+  GetOrderSummaryDto,
+} from "./order.dto";
 
 export class OrderService {
   static async createOrder(payload: CreateOrderDto) {
@@ -151,5 +156,51 @@ export class OrderService {
     });
 
     return updated;
+  }
+
+  static async getOrderSummary(dto: GetOrderSummaryDto) {
+    const { startDate, endDate } = dto;
+
+    // Build WHERE clause dynamically based on provided dates
+    let whereClause = "1 = 1";
+    const queryParams: Array<Date | null> = [];
+
+    if (startDate) {
+      whereClause += ` AND "createdAt" >= $${queryParams.length + 1}`;
+      queryParams.push(startDate);
+    }
+
+    if (endDate) {
+      whereClause += ` AND "createdAt" <= $${queryParams.length + 1}`;
+      queryParams.push(endDate);
+    }
+
+    const query = `
+      SELECT
+        COUNT(*) as "totalOrders",
+        COUNT(CASE WHEN status = 'PENDING' THEN 1 END) as "pendingOrders",
+        COUNT(CASE WHEN status = 'DELIVERED' THEN 1 END) as "completedOrders",
+        COALESCE(SUM(CASE WHEN status != 'CANCELLED' THEN "totalPrice" ELSE 0 END), 0) as "revenue"
+      FROM "orders"
+      WHERE ${whereClause}
+    `;
+
+    const summary = await prisma.$queryRawUnsafe<
+      Array<{
+        totalOrders: number;
+        pendingOrders: number;
+        completedOrders: number;
+        revenue: number;
+      }>
+    >(query, ...queryParams);
+
+    const result = summary[0];
+
+    return {
+      totalOrders: Number(result.totalOrders),
+      pendingOrders: Number(result.pendingOrders),
+      completedOrders: Number(result.completedOrders),
+      revenue: Number(result.revenue),
+    };
   }
 }

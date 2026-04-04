@@ -149,9 +149,13 @@ export class ProductService {
     const { search, page, limit } = dto;
     const pagination = new Pagination(page, limit);
 
-    const where = `WHERE p."isDeleted" = false AND p.stock < p."minimumThreshold" ${
-      search ? `AND p."name" ILIKE '%${search.replace(/'/g, "''")}%'` : ""
-    }`;
+    let where = `WHERE p."isDeleted" = false AND p.stock < p."minimumThreshold"`;
+    const whereParams = [];
+
+    if (search) {
+      where += ` AND p."name" ILIKE $${whereParams.length + 1}`;
+      whereParams.push(`%${search}%`);
+    }
 
     type ProductRow = {
       id: string;
@@ -168,33 +172,36 @@ export class ProductService {
       count: number;
     };
 
-    const products = await prisma.$queryRawUnsafe<ProductRow[]>(
-      `
-        SELECT 
-          p.id,
-          p.name,
-          p.description,
-          p.price,
-          p.stock,
-          p."minimumThreshold",
-          p."categoryId",
-          json_build_object('id', c.id, 'name', c.name) as category
-        FROM products p
-        LEFT JOIN categories c ON p."categoryId" = c.id
-        ${where}
-        ORDER BY p.stock ASC
-        LIMIT ${pagination.take}
-        OFFSET ${pagination.skip}
-      `,
-    );
-
-    const countResult = await prisma.$queryRawUnsafe<CountRow[]>(
-      `
-        SELECT COUNT(*)::int as count
-        FROM products p
-        ${where}
-      `,
-    );
+    const [products, countResult] = await Promise.all([
+      prisma.$queryRawUnsafe<ProductRow[]>(
+        `
+          SELECT 
+            p.id,
+            p.name,
+            p.description,
+            p.price,
+            p.stock,
+            p."minimumThreshold",
+            p."categoryId",
+            json_build_object('id', c.id, 'name', c.name) as category
+          FROM products p
+          LEFT JOIN categories c ON p."categoryId" = c.id
+          ${where}
+          ORDER BY p.stock ASC
+          LIMIT ${pagination.take}
+          OFFSET ${pagination.skip}
+        `,
+        ...whereParams,
+      ),
+      prisma.$queryRawUnsafe<CountRow[]>(
+        `
+          SELECT COUNT(*)::int as count
+          FROM products p
+          ${where}
+        `,
+        ...whereParams,
+      ),
+    ]);
 
     const total = countResult[0]?.count || 0;
 

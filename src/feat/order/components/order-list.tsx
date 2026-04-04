@@ -10,7 +10,6 @@ import { getOrdersApi } from "../order-api";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { OrderListFilter } from "./order-list-filter";
 import { UpdateOrderStatus } from "./update-order-status";
-import { addDays } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 type TOrder = Awaited<ReturnType<typeof getOrdersApi>>["data"][number];
@@ -20,10 +19,7 @@ const { accessor } = createColumnHelper<TOrder>();
 
 export function OrderList() {
   const { pagination, setPagination } = usePagination();
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  });
+  const [date, setDate] = useState<DateRange | undefined>();
 
   const [status, setStatus] = useState<string>("all");
   const [sortByCreatedAt, setSortByCreatedAt] = useState<TCreatedAtSort>("desc");
@@ -65,7 +61,6 @@ export function OrderList() {
           return `#${offset + row.index + 1}`;
         },
       },
-      accessor("orderId", { header: "Order ID" }),
       accessor("customerName", { header: "Customer" }),
       accessor("totalPrice", {
         header: "Total",
