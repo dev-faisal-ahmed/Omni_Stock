@@ -1,6 +1,7 @@
 import {
   addProductDto,
   getProductsDto,
+  getLowStockProductsDto,
   increaseProductStockDto,
   updateProductDto,
 } from "./product.dto";
@@ -21,6 +22,17 @@ export const productRoute = new Hono()
     const { products, meta } = await ProductService.getProducts(dto);
     return c.json(
       ResponseDto.success({ message: "Products retrieved successfully", data: products, meta }),
+    );
+  })
+  .get("/low-stock", authGuard(), queryValidator(getLowStockProductsDto), async (c) => {
+    const dto = c.req.valid("query");
+    const { products, meta } = await ProductService.getLowStockProducts(dto);
+    return c.json(
+      ResponseDto.success({
+        message: "Low stock products retrieved successfully",
+        data: products,
+        meta,
+      }),
     );
   })
   .get("/all", authGuard(), async (c) => {

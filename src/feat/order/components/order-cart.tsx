@@ -27,10 +27,10 @@ export function OrderCart() {
     mutationFn: createOrderApi,
     onSuccess: (data) => {
       toast.success(data.message || "Order added successfully");
-      invalidate("products");
       invalidate("orders");
-      removeAll();
+      invalidate("products");
       setValidationError(null);
+      removeAll();
     },
   });
 

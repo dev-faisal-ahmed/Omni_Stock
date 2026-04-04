@@ -1,6 +1,7 @@
 import {
   AddProductDto,
   GetProductsDto,
+  GetLowStockProductsDto,
   IncreaseProductStockDto,
   UpdateProductDto,
 } from "./product.dto";
@@ -142,5 +143,77 @@ export class ProductService {
     });
 
     return updated;
+  }
+
+  static async getLowStockProducts(dto: GetLowStockProductsDto) {
+    const { search, page, limit } = dto;
+    const pagination = new Pagination(page, limit);
+
+    const where = `WHERE p."isDeleted" = false AND p.stock < p."minimumThreshold" ${
+      search ? `AND p."name" ILIKE '%${search.replace(/'/g, "''")}%'` : ""
+    }`;
+
+    type ProductRow = {
+      id: string;
+      name: string;
+      description: string | null;
+      price: number;
+      stock: number;
+      minimumThreshold: number;
+      categoryId: string;
+      category: { id: string; name: string } | null;
+    };
+
+    type CountRow = {
+      count: number;
+    };
+
+    const products = await prisma.$queryRawUnsafe<ProductRow[]>(
+      `
+        SELECT 
+          p.id,
+          p.name,
+          p.description,
+          p.price,
+          p.stock,
+          p."minimumThreshold",
+          p."categoryId",
+          json_build_object('id', c.id, 'name', c.name) as category
+        FROM products p
+        LEFT JOIN categories c ON p."categoryId" = c.id
+        ${where}
+        ORDER BY p.stock ASC
+        LIMIT ${pagination.take}
+        OFFSET ${pagination.skip}
+      `,
+    );
+
+    const countResult = await prisma.$queryRawUnsafe<CountRow[]>(
+      `
+        SELECT COUNT(*)::int as count
+        FROM products p
+        ${where}
+      `,
+    );
+
+    const total = countResult[0]?.count || 0;
+
+    const formattedProducts = products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      minimumThreshold: product.minimumThreshold,
+      categoryId: product.categoryId,
+      category: product.category?.id
+        ? { id: product.category.id, name: product.category.name }
+        : null,
+    }));
+
+    return {
+      products: formattedProducts,
+      meta: pagination.getMeta(total),
+    };
   }
 }

@@ -39,8 +39,15 @@ export const increaseProductStockDto = z
   })
   .strict();
 
+export const getLowStockProductsDto = z.object({
+  search: z.string().trim().optional(),
+  page: z.coerce.number().int().positive().catch(1),
+  limit: z.coerce.number().int().positive().max(100).catch(10),
+});
+
 export type AddProductDto = z.infer<typeof addProductDto>;
 export type GetProductsDto = z.infer<typeof getProductsDto>;
+export type GetLowStockProductsDto = z.infer<typeof getLowStockProductsDto>;
 export type UpdateProductDto = z.infer<typeof updateProductDto>;
 export type UpdateProductInputDto = z.input<typeof updateProductDto>;
 export type IncreaseProductStockDto = z.infer<typeof increaseProductStockDto>;
