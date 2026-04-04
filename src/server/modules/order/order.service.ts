@@ -1,6 +1,8 @@
 import { prisma } from "@/server/db";
 import { AppError } from "@/server/utils/app.error";
-import { CreateOrderDto } from "./order.dto";
+import { Pagination } from "@/server/utils/pagination";
+import { OrderWhereInput } from "@/generated/prisma/models";
+import { CreateOrderDto, GetOrdersDto } from "./order.dto";
 
 export class OrderService {
   static async createOrder(payload: CreateOrderDto) {
@@ -88,5 +90,49 @@ export class OrderService {
 
       return { ...order, orderInfo: normalizedOrderInfo };
     });
+  }
+
+  static async getOrders(dto: GetOrdersDto) {
+    const { status, startDate, endDate, sortByCreatedAt, page, limit } = dto;
+
+    const pagination = new Pagination(page, limit);
+
+    const orderQuery: OrderWhereInput = {
+      ...(status && { status: status }),
+      ...((startDate || endDate) && {
+        createdAt: {
+          ...(startDate && { gte: startDate }),
+          ...(endDate && { lte: endDate }),
+        },
+      }),
+    };
+
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where: orderQuery,
+        skip: pagination.skip,
+        take: pagination.take,
+        orderBy: { createdAt: sortByCreatedAt },
+        select: {
+          id: true,
+          customerName: true,
+          totalPrice: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
+      prisma.order.count({ where: orderQuery }),
+    ]);
+
+    return {
+      orders: orders.map((order) => ({
+        orderId: order.id,
+        customerName: order.customerName,
+        totalPrice: order.totalPrice,
+        orderStatus: order.status,
+        createdAt: order.createdAt,
+      })),
+      meta: pagination.getMeta(total),
+    };
   }
 }

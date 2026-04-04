@@ -68,6 +68,8 @@ model Order {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
+  orderItems OrderProductJunction[]
+
   @@map("orders")
 }
 
@@ -84,6 +86,8 @@ model OrderProductJunction {
   orderId   String
   productId String
   quantity  Int
+
+  order Order @relation(fields: [orderId], references: [id])
 
   @@unique([orderId, productId])
   @@map("order_product_junction")
