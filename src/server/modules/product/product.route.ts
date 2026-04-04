@@ -24,6 +24,12 @@ export const productRoute = new Hono()
       ResponseDto.success({ message: "Products retrieved successfully", data: products, meta }),
     );
   })
+  .get("/summary", authGuard(), async (c) => {
+    const summary = await ProductService.getProductSummary();
+    return c.json(
+      ResponseDto.success({ message: "Product summary retrieved successfully", data: summary }),
+    );
+  })
   .get("/low-stock/count", authGuard(), async (c) => {
     const count = await ProductService.getLowStockCount();
     return c.json(

@@ -66,3 +66,10 @@ export async function getLowStockCountApi() {
   if (!resData.success) throw new Error(resData.message);
   return resData;
 }
+
+export async function getProductSummaryApi() {
+  const res = await productClient.summary.$get();
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}

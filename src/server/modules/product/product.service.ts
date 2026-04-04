@@ -237,4 +237,27 @@ export class ProductService {
 
     return result[0]?.count || 0;
   }
+
+  static async getProductSummary() {
+    const products = await prisma.product.findMany({
+      where: { isDeleted: false },
+      select: {
+        id: true,
+        name: true,
+        stock: true,
+        minimumThreshold: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    });
+
+    const summary = products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      stock: product.stock,
+      status: product.stock < product.minimumThreshold ? "low_stock" : "ok",
+    }));
+
+    return summary;
+  }
 }

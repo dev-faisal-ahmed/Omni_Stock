@@ -150,7 +150,7 @@ interface SummaryCardProps {
 
 function SummaryCard({ icon, title, amount, isLoading }: SummaryCardProps) {
   return (
-    <div className="bg-card rounded-lg border p-6 shadow-sm">
+    <div className="bg-card border p-6 shadow-sm">
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-2">
           <p className="text-muted-foreground text-sm font-medium">{title}</p>
