@@ -2,9 +2,16 @@
 
 import { DetailsSheet } from "@/components/details-sheet";
 import { Separator } from "@/components/ui/separator";
-import { getProductsApi } from "../product-api";
-
-type TProductLocal = Awaited<ReturnType<typeof getProductsApi>>["data"][number];
+type TProductLocal = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  stock: number;
+  minimumThreshold: number;
+  categoryId: string;
+  category?: { id: string; name: string } | null;
+};
 
 type TProductDetailsProps = {
   product: TProductLocal;
@@ -34,7 +41,7 @@ export function ProductDetails({ product }: TProductDetailsProps) {
               {statusText}
             </span>
             <span className="text-muted-foreground text-sm font-medium">
-              {product.category.name}
+              {product.category?.name || "N/A"}
             </span>
           </div>
         </div>

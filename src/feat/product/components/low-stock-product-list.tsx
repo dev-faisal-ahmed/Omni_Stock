@@ -4,12 +4,11 @@ import { usePagination } from "@/hooks/use-pagination";
 import { useSearch } from "@/hooks/use-search";
 import { QK } from "@/lib/cache-registry";
 import { useQuery } from "@tanstack/react-query";
-import { getProductsApi } from "../product-api";
+import { getLowStockProductsApi } from "../product-api";
 import { SearchInput } from "@/components/form/search-input";
-import { AddProduct } from "./add-product";
 import { ProductTable } from "./product-table";
 
-export function ProductList() {
+export function LowStockProductList() {
   const { pagination, setPagination } = usePagination();
   const { searchTerm, search, setSearch } = useSearch();
 
@@ -17,9 +16,9 @@ export function ProductList() {
   const pageSize = pagination.pageSize;
 
   const { data: apiResponse, isLoading } = useQuery({
-    queryKey: [QK.products, { page, pageSize, searchTerm }],
+    queryKey: [QK.products, { page, pageSize, searchTerm, mode: "low-stock" }],
     queryFn: () =>
-      getProductsApi({
+      getLowStockProductsApi({
         page: String(page),
         limit: String(pageSize),
         ...(searchTerm && { search: searchTerm }),
@@ -36,22 +35,21 @@ export function ProductList() {
       pagination={pagination}
       totalPage={meta?.totalPage ?? 0}
       onPaginationChange={setPagination}
-      header={<ProductListHeader value={search} onChange={setSearch} />}
-      mode="all"
+      header={<LowStockProductListHeader value={search} onChange={setSearch} />}
+      mode="low-stock"
     />
   );
 }
 
-type TProductListHeaderProps = {
+type TLowStockProductListHeaderProps = {
   value: string;
   onChange(value: string): void;
 };
 
-function ProductListHeader({ value, onChange }: TProductListHeaderProps) {
+function LowStockProductListHeader({ value, onChange }: TLowStockProductListHeaderProps) {
   return (
-    <div className="flex items-center justify-between gap-4 p-4">
-      <SearchInput value={value} onChange={onChange} placeholder="Search products..." />
-      <AddProduct />
+    <div className="flex items-center justify-start gap-4 p-4">
+      <SearchInput value={value} onChange={onChange} placeholder="Search low stock products..." />
     </div>
   );
 }

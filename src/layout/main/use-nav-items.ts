@@ -48,7 +48,19 @@ export function useNavItems() {
         title: "Products",
         url: "/products",
         icon: PackageIcon,
-        isActive: exactMatch("/products"),
+        isActive: partialMatch("/products"),
+        items: [
+          {
+            title: "All Products",
+            url: "/products",
+            isActive: exactMatch("/products"),
+          },
+          {
+            title: "Low Stock",
+            url: "/products/low-stock",
+            isActive: exactMatch("/products/low-stock"),
+          },
+        ],
       },
       {
         title: "Orders",

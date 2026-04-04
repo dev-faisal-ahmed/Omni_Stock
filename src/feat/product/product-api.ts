@@ -1,6 +1,7 @@
 import {
   AddProductDto,
   GetProductsDto,
+  GetLowStockProductsDto,
   IncreaseProductStockDto,
   UpdateProductInputDto,
 } from "@/server/modules/product/product.dto";
@@ -47,6 +48,13 @@ export async function increaseProductStockApi({
 
 export async function getAllProductsApi() {
   const res = await productClient.all.$get();
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}
+
+export async function getLowStockProductsApi(query: ToString<GetLowStockProductsDto>) {
+  const res = await productClient["low-stock"].$get({ query });
   const resData = await res.json();
   if (!resData.success) throw new Error(resData.message);
   return resData;
