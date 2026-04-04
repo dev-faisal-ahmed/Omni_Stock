@@ -4,6 +4,7 @@ export const QK = {
   auth: "auth",
   categories: "categories",
   products: "products",
+  orders: "orders",
 } as const;
 
 type TKey = (typeof QK)[keyof typeof QK];

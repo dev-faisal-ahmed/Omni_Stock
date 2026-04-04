@@ -28,6 +28,7 @@ export function OrderCart() {
     onSuccess: (data) => {
       toast.success(data.message || "Order added successfully");
       invalidate("products");
+      invalidate("orders");
       removeAll();
       setValidationError(null);
     },
