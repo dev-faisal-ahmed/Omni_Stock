@@ -91,7 +91,7 @@ function OrderSummary() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
         <SummaryCard
           icon={<ShoppingBagIcon className="h-5 w-5" />}
           title="Total Orders"
