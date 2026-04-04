@@ -6,6 +6,7 @@ import { errorHandler } from "./utils/error.handler";
 import { categoryRoute } from "./modules/category/category.route";
 import { productRoute } from "./modules/product/product.route";
 import { orderRoute } from "./modules/order/order.route";
+import { activityRoute } from "./modules/activity/activity.route";
 
 export const app = new Hono()
   .basePath("/api/v1")
@@ -15,4 +16,5 @@ export const app = new Hono()
   .route("/categories", categoryRoute)
   .route("/products", productRoute)
   .route("/orders", orderRoute)
+  .route("/activities", activityRoute)
   .onError(errorHandler);

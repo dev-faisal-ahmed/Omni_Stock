@@ -9,6 +9,7 @@ import { prisma } from "@/server/db";
 import { AppError } from "@/server/utils/app.error";
 import { Pagination } from "@/server/utils/pagination";
 import { ProductWhereInput } from "@/generated/prisma/models";
+import { ActivityService } from "../activity/activity.service";
 
 export class ProductService {
   static async addProduct(dto: AddProductDto) {
@@ -27,6 +28,10 @@ export class ProductService {
     if (!isCategoryExist) throw new AppError("Category not found", "NOT_FOUND");
 
     const newProduct = await prisma.product.create({ data: dto });
+
+    // Fire and forget activity log
+    void ActivityService.logActivity("PRODUCT", "Product created: " + newProduct.name);
+
     return newProduct;
   }
 
@@ -122,11 +127,14 @@ export class ProductService {
   static async deleteProduct(id: string) {
     const product = await prisma.product.findUnique({
       where: { id, isDeleted: false },
-      select: { id: true },
+      select: { id: true, name: true },
     });
 
     if (!product) throw new AppError("Product not found", "NOT_FOUND");
+
     await prisma.product.update({ where: { id }, data: { isDeleted: true } });
+
+    void ActivityService.logActivity("PRODUCT", `Product Deleted : ${product.name}`);
   }
 
   static async increaseProductStock(id: string, dto: IncreaseProductStockDto) {
@@ -141,6 +149,11 @@ export class ProductService {
       where: { id },
       data: { stock: { increment: dto.amount } },
     });
+
+    void ActivityService.logActivity(
+      "PRODUCT",
+      `Re Stock :  ${updated.name} | amount: ${dto.amount}`,
+    );
 
     return updated;
   }

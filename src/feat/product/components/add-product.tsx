@@ -30,6 +30,7 @@ export function AddProduct() {
     onSuccess() {
       toast.success("Product Added Successfully");
       invalidate("products");
+      invalidate("activities");
       onOpenChange(false);
     },
   });

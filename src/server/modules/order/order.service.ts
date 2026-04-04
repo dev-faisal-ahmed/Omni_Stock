@@ -8,6 +8,7 @@ import { prisma } from "@/server/db";
 import { AppError } from "@/server/utils/app.error";
 import { Pagination } from "@/server/utils/pagination";
 import { OrderWhereInput } from "@/generated/prisma/models";
+import { ActivityService } from "../activity/activity.service";
 
 export class OrderService {
   static async createOrder(payload: CreateOrderDto) {
@@ -93,6 +94,12 @@ export class OrderService {
         })),
       });
 
+      // Fire and forget activity log (outside transaction)
+      void ActivityService.logActivity(
+        "ORDER",
+        `Order Created : ${order.id} | Customer : ${order.customerName} | Total Price : ${totalPrice}`,
+      );
+
       return { ...order, orderInfo: normalizedOrderInfo };
     });
   }
@@ -154,6 +161,11 @@ export class OrderService {
       data: { status: dto.status },
       select: { id: true, status: true },
     });
+
+    void ActivityService.logActivity(
+      "ORDER",
+      `Order Status Updated : ${updated.id} | New Status : ${updated.status}`,
+    );
 
     return updated;
   }

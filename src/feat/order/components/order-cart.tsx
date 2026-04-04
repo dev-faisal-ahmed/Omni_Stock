@@ -29,6 +29,7 @@ export function OrderCart() {
       toast.success(data.message || "Order added successfully");
       invalidate("orders");
       invalidate("products");
+      invalidate("activities");
       setValidationError(null);
       removeAll();
     },

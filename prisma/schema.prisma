@@ -92,3 +92,23 @@ model OrderProductJunction {
   @@unique([orderId, productId])
   @@map("order_product_junction")
 }
+
+model Activity {
+  id        String         @id @default(uuid())
+  entity    ActivityEntity
+  message   String
+  createdAt DateTime       @default(now())
+
+  @@map("activities")
+}
+
+enum ActivityEntity {
+  PRODUCT
+  ORDER
+}
+
+enum ActivityAction {
+  CREATED
+  UPDATED
+  STATUS_CHANGED
+}

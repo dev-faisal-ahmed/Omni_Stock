@@ -38,6 +38,7 @@ export function ReStockProduct({ id, currentStock }: TRestockProductProps) {
     onSuccess() {
       toast.success("Product Restocked Successfully");
       invalidate("products");
+      invalidate("activities");
       form.reset();
       onOpenChange(false);
     },

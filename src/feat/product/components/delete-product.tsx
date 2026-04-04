@@ -21,6 +21,7 @@ export function DeleteProduct({ id }: TDeleteProductProps) {
     onSuccess() {
       toast.success("Product Deleted Successfully");
       invalidate("products");
+      invalidate("activities");
       onOpenChange(false);
     },
   });

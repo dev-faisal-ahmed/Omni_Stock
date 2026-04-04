@@ -50,9 +50,9 @@ export function useNavItems() {
             isActive: exactMatch("/products"),
           },
           {
-            title: "Low Stock",
-            url: "/products/low-stock",
-            isActive: exactMatch("/products/low-stock"),
+            title: "Re Stock Queue",
+            url: "/products/re-stock",
+            isActive: exactMatch("/products/re-stock"),
           },
         ],
       },

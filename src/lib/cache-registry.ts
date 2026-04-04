@@ -5,6 +5,7 @@ export const QK = {
   categories: "categories",
   products: "products",
   orders: "orders",
+  activities: "activities",
 } as const;
 
 type TKey = (typeof QK)[keyof typeof QK];

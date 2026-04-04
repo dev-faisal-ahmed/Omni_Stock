@@ -26,8 +26,9 @@ export function UpdateOrderStatus({ orderId, currentStatus }: TUpdateOrderStatus
   const { mutate: updateStatus, isPending } = useMutation({
     mutationFn: (status: OrderStatus) => updateOrderStatusApi(orderId, status),
     onSuccess(data) {
-      toast.success(data.message || "Order status updated successfully");
+      toast.success(data.message);
       invalidate("orders");
+      invalidate("activities");
     },
   });
 
