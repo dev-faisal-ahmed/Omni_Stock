@@ -6,11 +6,14 @@ export interface TOrderItem {
   name: string;
   price: number;
   quantity: number;
+  stock: number; // Added to make validation easier in the Cart component
 }
 
 interface OrderStoreState {
   items: TOrderItem[];
-  addItem: (item: Omit<TOrderItem, "quantity">, productStock: number) => void;
+  customerName: string;
+  setCustomerName: (name: string) => void;
+  addItem: (item: Omit<TOrderItem, "quantity" | "stock">, productStock: number) => void;
   updateQuantity: (productId: string, quantity: number, productStock: number) => void;
   removeItem: (productId: string) => void;
   removeAll: () => void;
@@ -18,15 +21,17 @@ interface OrderStoreState {
 
 export const useOrderStore = create<OrderStoreState>((set, get) => ({
   items: [],
+  customerName: "",
+
+  setCustomerName: (name) => set({ customerName: name }),
 
   addItem: (item, productStock) => {
     const { items } = get();
-    // const existingItem = items.find((i) => i.productId === item.productId);
     const existingItemIndex = items.findIndex((i) => i.productId === item.productId);
 
     if (existingItemIndex == -1 && productStock >= 1) {
       return set({
-        items: [...items, { ...item, quantity: 1 }],
+        items: [...items, { ...item, quantity: 1, stock: productStock }],
       });
     }
 
@@ -52,12 +57,10 @@ export const useOrderStore = create<OrderStoreState>((set, get) => ({
   },
 
   removeAll: () => {
-    set({ items: [] });
+    set({ items: [], customerName: "" });
   },
 
-  updateQuantity: (productId, quantity, productStock) => {
-    if (quantity > productStock) return toast.error("Stock limit reached for this product");
-
+  updateQuantity: (productId, quantity) => {
     // Automatically remove item if less than or equal to 0
     if (quantity <= 0) {
       set((state) => ({

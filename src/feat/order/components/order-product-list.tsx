@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MagnifyingGlassIcon, PackageIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function OrderProductList() {
   const { data: products, isLoading } = useAllProducts();
@@ -49,7 +50,7 @@ export function OrderProductList() {
   );
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex h-[calc(100vh-7.5rem)] flex-col space-y-4">
       <div className="relative">
         <MagnifyingGlassIcon className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
         <Input
@@ -61,16 +62,18 @@ export function OrderProductList() {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-        {filteredProducts.map((product) => (
-          <OrderProductCard key={product.id} product={product} onAdd={addItem} />
-        ))}
-        {filteredProducts.length === 0 && (
-          <div className="text-muted-foreground col-span-full py-8 text-center">
-            No products match your search.
-          </div>
-        )}
-      </div>
+      <ScrollArea>
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3">
+          {filteredProducts.map((product) => (
+            <OrderProductCard key={product.id} product={product} onAdd={addItem} />
+          ))}
+          {filteredProducts.length === 0 && (
+            <div className="text-muted-foreground col-span-full py-8 text-center">
+              No products match your search.
+            </div>
+          )}
+        </div>
+      </ScrollArea>
     </div>
   );
 }
