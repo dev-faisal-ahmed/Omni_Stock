@@ -1,52 +1,54 @@
 "use client";
 
 import { DataTable } from "@/components/data-table";
-import { SelectInput } from "@/components/form/select-input";
-import { Button } from "@/components/ui/button";
 import { QK } from "@/lib/cache-registry";
 import { usePagination } from "@/hooks/use-pagination";
 import { useQuery } from "@tanstack/react-query";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { getOrdersApi } from "../order-api";
 import { OrderStatus } from "@/generated/prisma/enums";
+import { OrderListFilter } from "./order-list-filter";
+import { addDays } from "date-fns";
+import { DateRange } from "react-day-picker";
 
 type TOrder = Awaited<ReturnType<typeof getOrdersApi>>["data"][number];
 type TCreatedAtSort = "asc" | "desc";
 
 const { accessor } = createColumnHelper<TOrder>();
 
-const statusOptions = [
-  { label: "All Status", value: "all" },
-  { label: "Pending", value: OrderStatus.PENDING },
-  { label: "Confirmed", value: OrderStatus.CONFIRMED },
-  { label: "Shipped", value: OrderStatus.SHIPPED },
-  { label: "Delivered", value: OrderStatus.DELIVERED },
-  { label: "Cancelled", value: OrderStatus.CANCELLED },
-];
-
-const sortOptions = [
-  { label: "Newest First", value: "desc" },
-  { label: "Oldest First", value: "asc" },
-];
-
 export function OrderList() {
   const { pagination, setPagination } = usePagination();
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(new Date().getFullYear(), 0, 20),
+    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
+  });
+
   const [status, setStatus] = useState<string>("all");
   const [sortByCreatedAt, setSortByCreatedAt] = useState<TCreatedAtSort>("desc");
+
+  const handleClearAll = () => {
+    setStatus("all");
+    setSortByCreatedAt("desc");
+    setDate(undefined);
+    setPagination({ page: 1, pageSize: 10 });
+  };
 
   const page = pagination.page;
   const pageSize = pagination.pageSize;
 
   const { data: apiResponse, isLoading } = useQuery({
-    queryKey: [QK.orders, { page, pageSize, status, sortByCreatedAt }],
+    queryKey: [QK.orders, { page, pageSize, status, sortByCreatedAt, date }],
     queryFn: () =>
       getOrdersApi({
         page: String(page),
         limit: String(pageSize),
         sortByCreatedAt,
         ...(status !== "all" && { status: status as OrderStatus }),
+        ...(date && {
+          ...(date.from && { startDate: date.from.toISOString() }),
+          ...(date.to && { endDate: date.to.toISOString() }),
+        }),
       }),
   });
 
@@ -62,7 +64,6 @@ export function OrderList() {
           return `#${offset + row.index + 1}`;
         },
       },
-      accessor("orderId", { header: "Order ID" }),
       accessor("customerName", { header: "Customer" }),
       accessor("totalPrice", {
         header: "Total",
@@ -92,52 +93,19 @@ export function OrderList() {
       totalPage={meta?.totalPage ?? 0}
       isLoading={isLoading}
       header={
-        <OrderListHeader
+        <OrderListFilter
           status={status}
           onStatusChange={setStatus}
           sortByCreatedAt={sortByCreatedAt}
           onSortChange={setSortByCreatedAt}
+          date={date}
+          setDate={setDate}
+          onClearAll={handleClearAll}
         />
       }
       className={{
         body: "h-[calc(100vh-14.5rem)]",
       }}
     />
-  );
-}
-
-type TOrderListHeaderProps = {
-  status: string;
-  onStatusChange(value: string): void;
-  sortByCreatedAt: TCreatedAtSort;
-  onSortChange(value: TCreatedAtSort): void;
-};
-
-function OrderListHeader({
-  status,
-  onStatusChange,
-  sortByCreatedAt,
-  onSortChange,
-}: TOrderListHeaderProps) {
-  return (
-    <div className="flex flex-wrap items-center justify-between gap-4 p-4">
-      <div className="grid w-full gap-4 sm:w-auto sm:grid-cols-2">
-        <div className="w-full sm:w-48">
-          <SelectInput value={status} onChange={onStatusChange} options={statusOptions} />
-        </div>
-
-        <div className="w-full sm:w-48">
-          <SelectInput
-            value={sortByCreatedAt}
-            onChange={(value) => onSortChange(value as TCreatedAtSort)}
-            options={sortOptions}
-          />
-        </div>
-      </div>
-
-      <Button asChild>
-        <Link href="/orders/new">Add New</Link>
-      </Button>
-    </div>
   );
 }
