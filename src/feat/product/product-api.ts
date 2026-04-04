@@ -59,3 +59,10 @@ export async function getLowStockProductsApi(query: ToString<GetLowStockProducts
   if (!resData.success) throw new Error(resData.message);
   return resData;
 }
+
+export async function getLowStockCountApi() {
+  const res = await productClient["low-stock"].count.$get();
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}

@@ -223,4 +223,18 @@ export class ProductService {
       meta: pagination.getMeta(total),
     };
   }
+
+  static async getLowStockCount() {
+    type CountRow = {
+      count: number;
+    };
+
+    const result = await prisma.$queryRawUnsafe<CountRow[]>(`
+      SELECT COUNT(*)::int as count
+      FROM products p
+      WHERE p."isDeleted" = false AND p.stock < p."minimumThreshold"
+    `);
+
+    return result[0]?.count || 0;
+  }
 }

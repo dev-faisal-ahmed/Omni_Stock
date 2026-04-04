@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/select";
 import { XIcon } from "@phosphor-icons/react";
 
-type TSelectOption = {
+export type TSelectOption = {
   label: string;
   value: string;
 };
