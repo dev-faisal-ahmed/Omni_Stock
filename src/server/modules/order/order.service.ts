@@ -2,7 +2,7 @@ import { prisma } from "@/server/db";
 import { AppError } from "@/server/utils/app.error";
 import { Pagination } from "@/server/utils/pagination";
 import { OrderWhereInput } from "@/generated/prisma/models";
-import { CreateOrderDto, GetOrdersDto } from "./order.dto";
+import { CreateOrderDto, GetOrdersDto, UpdateOrderStatusDto } from "./order.dto";
 
 export class OrderService {
   static async createOrder(payload: CreateOrderDto) {
@@ -134,5 +134,22 @@ export class OrderService {
       })),
       meta: pagination.getMeta(total),
     };
+  }
+
+  static async updateOrderStatus(id: string, dto: UpdateOrderStatusDto) {
+    const order = await prisma.order.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+
+    if (!order) throw new AppError("Order not found", "NOT_FOUND");
+
+    const updated = await prisma.order.update({
+      where: { id },
+      data: { status: dto.status },
+      select: { id: true, status: true },
+    });
+
+    return updated;
   }
 }

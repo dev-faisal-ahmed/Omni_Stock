@@ -22,3 +22,10 @@ export async function getOrdersApi(query: TGetOrdersApiQuery) {
   if (!resData.success) throw new Error(resData.message);
   return resData;
 }
+
+export async function updateOrderStatusApi(id: string, status: OrderStatus) {
+  const res = await orderClient[":id"].$patch({ param: { id }, json: { status } });
+  const resData = await res.json();
+  if (!resData.success) throw new Error(resData.message);
+  return resData;
+}

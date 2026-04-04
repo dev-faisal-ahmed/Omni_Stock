@@ -9,6 +9,7 @@ import { useMemo, useState } from "react";
 import { getOrdersApi } from "../order-api";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { OrderListFilter } from "./order-list-filter";
+import { UpdateOrderStatus } from "./update-order-status";
 import { addDays } from "date-fns";
 import { DateRange } from "react-day-picker";
 
@@ -64,19 +65,27 @@ export function OrderList() {
           return `#${offset + row.index + 1}`;
         },
       },
+      accessor("orderId", { header: "Order ID" }),
       accessor("customerName", { header: "Customer" }),
       accessor("totalPrice", {
         header: "Total",
         cell: ({ getValue }) => `${getValue().toFixed(2)} ৳`,
       }),
-      accessor("orderStatus", {
+      {
+        id: "status",
         header: "Status",
-        cell: ({ getValue }) => (
-          <span className="bg-muted inline-flex min-w-24 justify-center px-2 py-1 text-xs font-medium">
-            {getValue()}
-          </span>
-        ),
-      }),
+        cell: ({ row }) => {
+          const order = row.original;
+          return (
+            <div className="w-44">
+              <UpdateOrderStatus
+                orderId={order.orderId}
+                currentStatus={order.orderStatus as OrderStatus}
+              />
+            </div>
+          );
+        },
+      },
       accessor("createdAt", {
         header: "Created At",
         cell: ({ getValue }) => new Date(getValue()).toLocaleString(),

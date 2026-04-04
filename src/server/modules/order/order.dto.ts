@@ -25,5 +25,10 @@ export const getOrdersDto = z
     path: ["startDate"],
   });
 
+export const updateOrderStatusDto = z.object({
+  status: z.enum(Object.values(Object.values(OrderStatus)), "Invalid order status"),
+});
+
 export type CreateOrderDto = z.infer<typeof createOrderDto>;
 export type GetOrdersDto = z.infer<typeof getOrdersDto>;
+export type UpdateOrderStatusDto = z.infer<typeof updateOrderStatusDto>;
