@@ -17,7 +17,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      UserRole @default(MANAGER)
+  role      UserRole @default(ADMIN)
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
