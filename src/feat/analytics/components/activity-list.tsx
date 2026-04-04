@@ -89,7 +89,7 @@ function ActivityItem({
       <div className="group hover:bg-muted/50 relative px-3 py-4 transition-colors">
         <div className="flex gap-3">
           {/* Icon */}
-          <div className="relative z-10 flex-shrink-0 pt-0.5">
+          <div className="relative z-10 shrink-0 pt-0.5">
             <div className={`rounded-full ${config.bgColor} p-2`}>
               <IconComponent className={`h-4 w-4 ${config.color}`} />
             </div>
@@ -104,7 +104,7 @@ function ActivityItem({
                     {config.label}
                   </Badge>
                 </div>
-                <p className="text-foreground text-sm leading-relaxed font-medium break-words">
+                <p className="text-foreground text-sm leading-relaxed font-medium wrap-break-word">
                   {activity.message}
                 </p>
               </div>
